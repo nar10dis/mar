@@ -1,0 +1,34 @@
+/* Palette (ROADMAP > Direction artistique). Proposition, à ajuster. */
+:root {
+  --bg: #1a1714;
+  --grid: #2a2520;
+  --panel: #2e2a26;
+  --paper: #e8dcc4;
+  --paper-line: #b8a888;
+  --ink: #2a2118;
+  --text: #d8cfc0;
+  --accent-blue: #4a6a8a;
+  --accent-rust: #a8452e;
+
+  /* Dérivés */
+  --outline: #14110e;
+  --text-muted: #9a8f80;
+  --accent-blue-dark: #2f4560;
+  --accent-blue-light: #6f93b5;
+  --accent-rust-light: #d0694c;
+  --bevel-light: #6b6259;
+  --bevel-mid: #4a433c;
+  --bevel-dark: #1f1b17;
+
+  /* Pixel art : tous les assets sont affichés ×2 */
+  --px: 2px;
+  --scale: 2;
+
+  /* Typo. --font-text passera sur m5x7 / m6x11 quand la licence sera validée. */
+  --font-ui: 'Pixelify Sans', ui-monospace, monospace;
+  --font-text: 'Pixelify Sans', ui-monospace, monospace;
+  --fs-text: 20px;
+  --lh: 32px; /* interligne = pas des pointillés des cartouches */
+
+  --status-h: 32px;
+}

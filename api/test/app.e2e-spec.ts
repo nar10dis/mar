@@ -22,8 +22,8 @@ describe('API (e2e)', () => {
     return request(app.getHttpServer()).get('/api/health').expect(200).expect({ status: 'ok' });
   });
 
-  it('GET /api/messages', () => {
-    return request(app.getHttpServer()).get('/api/messages').expect(200);
+  it('GET /api/themes', () => {
+    return request(app.getHttpServer()).get('/api/themes').expect(200);
   });
 
   afterEach(async () => {

@@ -9,9 +9,144 @@ datasource db {
   provider = "postgresql"
 }
 
-model Message {
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MediaType {
+  IMAGE
+  AUDIO
+  PDF
+}
+
+/// Ordre = ordre des bulles dans reactions.png
+enum ReactionKind {
+  HEART
+  DROP
+  QUESTION
+  ELLIPSIS
+  SMILE
+  ZZ
+  EXCLAMATION
+  NOTE
+  ANGER
+}
+
+model User {
+  id           Int             @id @default(autoincrement())
+  email        String          @unique
+  passwordHash String
+  pseudo       String          @unique
+  avatarUrl    String?
+  role         Role            @default(USER)
+  createdAt    DateTime        @default(now())
+  articles     Article[]
+  comments     Comment[]
+  media        Media[]
+  inventory    InventorySlot[]
+}
+
+model Theme {
+  id       Int       @id @default(autoincrement())
+  slug     String    @unique
+  name     String
+  color    String
+  order    Int
+  articles Article[]
+}
+
+model Article {
+  id         Int             @id @default(autoincrement())
+  title      String
+  author     User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId   Int
+  theme      Theme           @relation(fields: [themeId], references: [id])
+  themeId    Int
+  coverUrl   String?
+  /// Contenu en blocs (voir éditeur, phase 4)
+  content    Json
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  media      Media[]
+  reactions  Reaction[]
+  comments   Comment[]
+  inSlots    InventorySlot[]
+
+  @@index([themeId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+model Media {
+  id         Int       @id @default(autoincrement())
+  article    Article?  @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  articleId  Int?
+  uploader   User      @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+  uploaderId Int
+  type       MediaType
+  url        String
+  mime       String
+  size       Int
+  createdAt  DateTime  @default(now())
+}
+
+model Reaction {
+  id        Int          @id @default(autoincrement())
+  article   Article      @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
+  kind      ReactionKind
+  /// "user:<id>" si connecté, sinon UUID anonyme (cookie httpOnly)
+  voterKey  String
+  createdAt DateTime     @default(now())
+
+  @@unique([articleId, voterKey])
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  article   Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId  Int?
+  replies   Comment[] @relation("CommentReplies")
+  body      String
+  createdAt DateTime  @default(now())
+
+  @@index([articleId])
+}
+
+model Magazine {
+  id           Int     @id @default(autoincrement())
+  title        String
+  issue        String?
+  coverUrl     String
+  /// Prix en centimes
+  price        Int
+  description  String?
+  helloAssoUrl String
+  order        Int     @default(0)
+  published    Boolean @default(true)
+}
+
+model Announcement {
   id        Int      @id @default(autoincrement())
-  author    String
-  content   String
+  title     String
+  body      String
   createdAt DateTime @default(now())
+  published Boolean  @default(true)
+}
+
+model InventorySlot {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  /// 0 à 7
+  position  Int
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
+
+  @@unique([userId, position])
 }

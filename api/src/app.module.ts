@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'node:path';
 import { AppController } from './app.controller.js';
-import { MessagesModule } from './messages/messages.module.js';
+import { ThemesModule } from './themes/themes.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 
 @Module({
@@ -12,10 +12,10 @@ import { PrismaModule } from './prisma/prisma.module.js';
     // Serves the React build (web/dist) so the whole demo is one service and one URL.
     ServeStaticModule.forRoot({
       rootPath: process.env.WEB_DIST ?? join(import.meta.dirname, '..', '..', 'web', 'dist'),
-      exclude: ['/api/{*path}', '/socket.io/{*path}'],
+      exclude: ['/api/{*path}'],
     }),
     PrismaModule,
-    MessagesModule,
+    ThemesModule,
   ],
   controllers: [AppController],
 })
