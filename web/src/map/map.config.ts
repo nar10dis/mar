@@ -63,10 +63,4 @@ export const POIS: Poi[] = [
   },
 ];
 
-/** Horloge : centre en %, taille en % de la largeur de la carte (elle est carrée). */
-export const CLOCK = {
-  landscape: { x: 88, y: 50, size: 13 },
-  portrait: { x: 78, y: 50, size: 26 },
-};
-
 export const poiById = (id: Poi['id']) => POIS.find((p) => p.id === id)!;

@@ -52,14 +52,15 @@ code { font-family: var(--font-ui); font-size: 13px; color: var(--text-muted); }
 
 /* ---------------------------------------------------------------- Actu */
 .actu-layout { display: grid; grid-template-columns: 360px 1fr; gap: 40px; align-items: start; }
-.actu-about { position: sticky; top: calc(var(--status-h) + 24px); }
+/* sticky dans l'écran qui défile (.ds__main), pas dans la fenêtre */
+.actu-about { position: sticky; top: 24px; }
 .actu-feed { display: flex; flex-direction: column; gap: 32px; }
 .announcement__date { display: block; margin-bottom: 8px; color: var(--accent-rust-light); font-size: 16px; }
 .announcement__body p { margin: 0 0 12px; }
 .announcement__body p:last-child { margin-bottom: 0; }
 
 /* ---------------------------------------------------------------- Écrans étroits */
-@media (max-width: 900px) {
+@container ds-main (max-width: 900px) {
   .design-grid, .actu-layout { grid-template-columns: 1fr; }
   .span-2 { grid-column: auto; }
   .actu-about { position: static; }
@@ -92,7 +93,7 @@ code { font-family: var(--font-ui); font-size: 13px; color: var(--text-muted); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .input98--compact { padding: 4px 8px; width: auto; }
 
-@media (max-width: 900px) {
+@container ds-main (max-width: 900px) {
   .account-grid, .admin-form__grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .admin-form__cover { max-width: 220px; }

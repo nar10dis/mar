@@ -9,6 +9,7 @@ import './components/components.css';
 import './layout/layout.css';
 import './map/map.css';
 import './pages/pages.css';
+import './widgets/widgets.css';
 import { AuthProvider } from './auth/AuthContext.tsx';
 import { router } from './router.tsx';
 

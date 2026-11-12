@@ -24,3 +24,10 @@ export interface Announcement {
   body: string;
   createdAt: string;
 }
+
+/** GET /api/presence */
+export interface OnlineUser {
+  id: number;
+  pseudo: string;
+  avatarUrl: string | null;
+}

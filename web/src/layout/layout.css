@@ -17,6 +17,68 @@
 .status-bar__clock { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .status-bar__sep { width: var(--px); height: 14px; background: var(--bevel-light); }
 
+/* ---------------------------------------------------------------- Écrans DS */
+/* Deux écrans : le contenu (.ds__main) et les widgets (.ds__widgets).
+   Paysage : widgets à gauche, empilés. Portrait : widgets en bas, côte à côte. */
+.ds {
+  --gap: 16px;
+  --widgets-w: clamp(200px, 22vw, 320px);
+  --widgets-h: clamp(150px, 28dvh, 260px);
+  display: grid;
+  grid-template-columns: var(--widgets-w) minmax(0, 1fr);
+  grid-template-areas: 'widgets main';
+  gap: var(--gap);
+  height: calc(100vh - var(--status-h));
+  height: calc(100dvh - var(--status-h));
+  padding: var(--gap);
+}
+
+/* Un écran « découpé » sur le quadrillage, comme la carte */
+.ds-screen {
+  min-width: 0;
+  min-height: 0;
+  border: var(--px) solid var(--outline);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) var(--px), transparent var(--px)),
+    linear-gradient(90deg, var(--grid) var(--px), transparent var(--px));
+  background-size: 32px 32px;
+  box-shadow: 6px 6px 0 rgb(0 0 0 / 0.45), inset var(--px) var(--px) 0 var(--bevel-mid);
+}
+
+.ds__main {
+  grid-area: main;
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* Les pages s'adaptent à la taille de l'écran, pas de la fenêtre (@container ds-main) */
+  container: ds-main / size;
+}
+
+.ds__widgets {
+  grid-area: widgets;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--gap);
+  padding: 12px;
+}
+
+@media (orientation: portrait) {
+  .ds {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) var(--widgets-h);
+    grid-template-areas: 'main' 'widgets';
+  }
+  .ds__widgets {
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .ds { --gap: 8px; }
+  .ds__widgets { padding: 8px; }
+}
+
 /* ---------------------------------------------------------------- Page */
 .page {
   max-width: 1100px;
@@ -38,7 +100,7 @@
 }
 .page__actions { margin-left: auto; display: flex; gap: 12px; }
 
-@media (max-width: 700px) {
+@container ds-main (max-width: 700px) {
   .page { padding: 16px 16px 48px; }
   .page__head { flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
   .page__title { font-size: 24px; }

@@ -1,8 +1,7 @@
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { PixelIcon } from '../components/PixelIcon.tsx';
-import { CLOCK, MAP, POIS } from './map.config.ts';
-import { OldClock } from './OldClock.tsx';
+import { MAP, POIS } from './map.config.ts';
 
 // Les positions paysage / portrait passent en variables CSS : le basculement se fait
 // en pur CSS avec @media (orientation: portrait), sans JS ni re-render.
@@ -18,20 +17,6 @@ export function MapPage() {
           <source media="(orientation: portrait)" srcSet={MAP.portrait.image} />
           <img className="map__image" src={MAP.landscape.image} alt="" draggable={false} />
         </picture>
-
-        <div
-          className="map__clock"
-          style={vars({
-            x: CLOCK.landscape.x,
-            y: CLOCK.landscape.y,
-            size: CLOCK.landscape.size,
-            xp: CLOCK.portrait.x,
-            yp: CLOCK.portrait.y,
-            sizep: CLOCK.portrait.size,
-          })}
-        >
-          <OldClock />
-        </div>
 
         <nav aria-label="Lieux">
           {POIS.map((poi) => (

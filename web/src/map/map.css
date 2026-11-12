@@ -1,43 +1,35 @@
+/* La carte remplit l'écran principal (.ds__main, conteneur « ds-main ») en gardant ses proportions :
+   cqh = hauteur de l'écran. */
 .map-screen {
   display: grid;
   place-items: center;
-  min-height: calc(100vh - var(--status-h));
-  min-height: calc(100dvh - var(--status-h));
+  height: 100%;
   padding: 16px;
 }
 
 /* ---- Paysage (par défaut) */
 .map {
-  --avail-h: calc(100dvh - var(--status-h) - 32px);
   position: relative;
   aspect-ratio: 1920 / 1080;
-  width: min(100%, calc(var(--avail-h) * 16 / 9));
+  width: min(100%, calc((100cqh - 32px) * 16 / 9));
   border: var(--px) solid var(--outline);
   box-shadow: 6px 6px 0 rgb(0 0 0 / 0.45);
 }
 .map__image { display: block; width: 100%; height: 100%; }
 
-.poi, .map__clock {
+.poi {
   position: absolute;
   left: calc(var(--x) * 1%);
   top: calc(var(--y) * 1%);
 }
-.map__clock {
-  width: calc(var(--size) * 1%);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(4px 4px 0 rgb(0 0 0 / 0.5));
-}
-.old-clock { display: block; width: 100%; height: 100%; }
 
 /* ---- Portrait : écran plus haut que large => carte verticale */
 @media (orientation: portrait) {
   .map {
     aspect-ratio: 1080 / 1920;
-    width: min(100%, calc(var(--avail-h) * 9 / 16));
+    width: min(100%, calc((100cqh - 32px) * 9 / 16));
   }
-  .poi, .map__clock { left: calc(var(--xp) * 1%); top: calc(var(--yp) * 1%); }
-  .map__clock { width: calc(var(--sizep) * 1%); }
+  .poi { left: calc(var(--xp) * 1%); top: calc(var(--yp) * 1%); }
 }
 
 /* ---- POI */
