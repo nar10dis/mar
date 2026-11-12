@@ -36,10 +36,11 @@
   font-size: 32px;
   line-height: 1;
 }
-.page__title-icon {
-  width: 64px;
-  height: 64px;
-  background-size: 128px 64px;
-  background-position: 0 0;
-}
 .page__actions { margin-left: auto; display: flex; gap: 12px; }
+
+@media (max-width: 700px) {
+  .page { padding: 16px 16px 48px; }
+  .page__head { flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+  .page__title { font-size: 24px; }
+  .page__actions { margin-left: 0; width: 100%; flex-wrap: wrap; }
+}

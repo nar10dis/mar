@@ -15,4 +15,52 @@ code { font-family: var(--font-ui); font-size: 13px; color: var(--text-muted); }
 .swatch { width: 28px; height: 28px; border: var(--px) solid var(--outline); box-shadow: inset 0 0 0 var(--px) rgb(255 255 255 / 0.12); }
 
 .icon-cell { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; min-width: 72px; }
-.poi-demo:hover, .poi-demo:focus-visible { --frame: 1; }
+
+.page__intro { margin: -16px 0 32px; color: var(--text-muted); }
+
+/* ---------------------------------------------------------------- Shop */
+.shop-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 40px 32px;
+}
+.mag-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: var(--px) solid var(--outline);
+  box-shadow: 6px 6px 0 rgb(0 0 0 / 0.45), inset var(--px) var(--px) 0 var(--bevel-light);
+}
+.mag-card__cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-bottom: var(--px) solid var(--outline);
+  background: var(--bg);
+}
+.mag-card__info { display: flex; flex-direction: column; gap: 8px; flex: 1; padding: 12px; }
+.mag-card__title { display: flex; align-items: baseline; gap: 8px; font-size: 18px; line-height: 1.2; }
+.mag-card__issue { color: var(--accent-rust-light); font-size: 16px; }
+.mag-card__desc { margin: 0; color: var(--text-muted); font-size: 16px; line-height: 1.4; }
+.mag-card__buy { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 8px; }
+.mag-card__price { font-size: 20px; font-weight: 700; color: var(--paper); }
+
+/* ---------------------------------------------------------------- Actu */
+.actu-layout { display: grid; grid-template-columns: 360px 1fr; gap: 40px; align-items: start; }
+.actu-about { position: sticky; top: calc(var(--status-h) + 24px); }
+.actu-feed { display: flex; flex-direction: column; gap: 32px; }
+.announcement__date { display: block; margin-bottom: 8px; color: var(--accent-rust-light); font-size: 16px; }
+.announcement__body p { margin: 0 0 12px; }
+.announcement__body p:last-child { margin-bottom: 0; }
+
+/* ---------------------------------------------------------------- Écrans étroits */
+@media (max-width: 900px) {
+  .design-grid, .actu-layout { grid-template-columns: 1fr; }
+  .span-2 { grid-column: auto; }
+  .actu-about { position: static; }
+}

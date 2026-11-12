@@ -5,31 +5,7 @@ import { PageLayout } from '../layout/PageLayout.tsx';
 import { asset } from '../lib/assets.ts';
 import { poiById } from '../map/map.config.ts';
 
-// Pages vides de la phase 1 : elles seront remplies aux phases 2 à 6.
-
-export function ShopPage() {
-  return (
-    <PageLayout title="Shop" poiIcon={poiById('shop').icon}>
-      <Window98 title="magazines.exe">
-        <Cartouche title="Bientôt">
-          <p>La grille des magazines arrive en phase 2, avec un lien vers HelloAsso pour chaque numéro.</p>
-        </Cartouche>
-      </Window98>
-    </PageLayout>
-  );
-}
-
-export function ActuPage() {
-  return (
-    <PageLayout title="Actu" poiIcon={poiById('actu').icon}>
-      <Window98 title="annonces.txt">
-        <Cartouche title="Bientôt">
-          <p>Qui sommes-nous, puis la liste des annonces (phase 2).</p>
-        </Cartouche>
-      </Window98>
-    </PageLayout>
-  );
-}
+// Pages encore vides : elles seront remplies aux phases 4 à 6.
 
 export function BlogPage() {
   return (

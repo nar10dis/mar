@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import { PixelButton } from '../components/PixelButton.tsx';
+import { PixelIcon } from '../components/PixelIcon.tsx';
 import { asset } from '../lib/assets.ts';
 
 interface PageLayoutProps {
   title: string;
-  /** Icône 32 px du POI (sheet 2 frames) affichée à côté du titre */
+  /** Icône 32 px du POI affichée à côté du titre */
   poiIcon?: string;
   /** Boutons à droite du titre */
   actions?: ReactNode;
@@ -20,13 +21,7 @@ export function PageLayout({ title, poiIcon, actions, children }: PageLayoutProp
           Carte
         </PixelButton>
         <h1 className="page__title">
-          {poiIcon && (
-            <span
-              className="page__title-icon pixel"
-              style={{ backgroundImage: `url(${poiIcon})` }}
-              aria-hidden
-            />
-          )}
+          {poiIcon && <PixelIcon src={poiIcon} size={32} />}
           {title}
         </h1>
         {actions && <div className="page__actions">{actions}</div>}

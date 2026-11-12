@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Cartouche } from '../components/Cartouche.tsx';
 import { PixelButton } from '../components/PixelButton.tsx';
 import { PixelIcon } from '../components/PixelIcon.tsx';
@@ -8,31 +8,18 @@ import { PageLayout } from '../layout/PageLayout.tsx';
 import { asset } from '../lib/assets.ts';
 import { REACTIONS } from '../lib/reactions.ts';
 import type { ReactionKind } from '../lib/reactions.ts';
+import type { Theme } from '../lib/types.ts';
+import { useApi } from '../lib/useApi.ts';
 import { POIS } from '../map/map.config.ts';
-
-interface Theme {
-  id: number;
-  slug: string;
-  name: string;
-  color: string;
-}
 
 const TOKENS = ['--bg', '--grid', '--panel', '--paper', '--paper-line', '--ink', '--text', '--accent-blue', '--accent-rust'];
 const ICONS = ['profil', 'nouvel-article', 'recherche', 'retour', 'fermer', 'carte'];
 
 /** Page de démo du design system (critère de fin de la phase 0). */
 export function DesignPage() {
-  const [themes, setThemes] = useState<Theme[] | null>(null);
-  const [apiError, setApiError] = useState(false);
+  const themes = useApi<Theme[]>('/api/themes');
   const [counts, setCounts] = useState<Record<string, number>>({ HEART: 4, SMILE: 2, ZZ: 1 });
   const [mine, setMine] = useState<ReactionKind | null>(null);
-
-  useEffect(() => {
-    fetch('/api/themes')
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then(setThemes)
-      .catch(() => setApiError(true));
-  }, []);
 
   // Une réaction par personne, modifiable : re-cliquer la retire.
   function react(kind: ReactionKind) {
@@ -108,11 +95,11 @@ export function DesignPage() {
           </div>
         </Window98>
 
-        <Window98 title="POI de la carte (survol = 2e frame)">
+        <Window98 title="POI de la carte (survol = coins DS)">
           <div className="row wrap">
             {POIS.map((p) => (
-              <span key={p.id} className="icon-cell poi-demo" tabIndex={0}>
-                <PixelIcon src={p.icon} size={32} frames={2} />
+              <span key={p.id} className="icon-cell ds-select" style={{ position: 'relative' }} tabIndex={0}>
+                <PixelIcon src={p.icon} size={32} />
                 <code>{p.id}</code>
               </span>
             ))}
@@ -124,15 +111,15 @@ export function DesignPage() {
         </Window98>
 
         <Window98 title="Thèmes (depuis la BDD : /api/themes)">
-          {apiError && <p className="muted">API injoignable.</p>}
-          {!themes && !apiError && <p className="muted">Chargement…</p>}
-          {themes && (
+          {themes.status === 'error' && <p className="muted">API injoignable.</p>}
+          {themes.status === 'loading' && <p className="muted">Chargement…</p>}
+          {themes.status === 'ready' && (
             <div className="row wrap">
               <span className="icon-cell">
                 <PixelIcon src={asset('theme-tous.png')} size={32} />
                 <code>tous</code>
               </span>
-              {themes.map((t) => (
+              {themes.data.map((t) => (
                 <span key={t.slug} className="icon-cell">
                   <PixelIcon src={asset(`theme-${t.slug}.png`)} size={32} label={t.name} />
                   <code>{t.name}</code>

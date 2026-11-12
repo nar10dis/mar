@@ -10,10 +10,12 @@ interface PixelButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: string;
   /** Si présent, rend un lien interne au lieu d'un bouton */
   to?: string;
+  /** Si présent, rend un lien externe (nouvel onglet) */
+  href?: string;
   children?: ReactNode;
 }
 
-export function PixelButton({ variant = 'default', icon, to, children, className, ...rest }: PixelButtonProps) {
+export function PixelButton({ variant = 'default', icon, to, href, children, className, ...rest }: PixelButtonProps) {
   const cls = ['pixel-button', `pixel-button--${variant}`, className].filter(Boolean).join(' ');
   const content = (
     <>
@@ -21,6 +23,15 @@ export function PixelButton({ variant = 'default', icon, to, children, className
       {children && <span>{children}</span>}
     </>
   );
+  if (href) {
+    return (
+      <a href={href} className={cls} target="_blank" rel="noopener noreferrer">
+        {content}
+        <span aria-hidden>↗</span>
+        <span className="visually-hidden">(nouvel onglet)</span>
+      </a>
+    );
+  }
   if (to) {
     return (
       <Link to={to} className={cls}>

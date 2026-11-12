@@ -2,7 +2,9 @@ import { createBrowserRouter } from 'react-router';
 import { RootLayout } from './layout/RootLayout.tsx';
 import { MapPage } from './map/MapPage.tsx';
 import { DesignPage } from './pages/DesignPage.tsx';
-import { ActuPage, ArchivesPage, BlogPage, NotFoundPage, ShopPage } from './pages/PlaceholderPages.tsx';
+import { ActuPage } from './pages/ActuPage.tsx';
+import { ArchivesPage, BlogPage, NotFoundPage } from './pages/PlaceholderPages.tsx';
+import { ShopPage } from './pages/ShopPage.tsx';
 
 export const router = createBrowserRouter([
   {

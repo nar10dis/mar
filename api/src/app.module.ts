@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'node:path';
 import { AppController } from './app.controller.js';
+import { AnnouncementsModule } from './announcements/announcements.module.js';
+import { MagazinesModule } from './magazines/magazines.module.js';
 import { ThemesModule } from './themes/themes.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 
@@ -16,6 +18,8 @@ import { PrismaModule } from './prisma/prisma.module.js';
     }),
     PrismaModule,
     ThemesModule,
+    MagazinesModule,
+    AnnouncementsModule,
   ],
   controllers: [AppController],
 })

@@ -22,8 +22,17 @@ describe('API (e2e)', () => {
     return request(app.getHttpServer()).get('/api/health').expect(200).expect({ status: 'ok' });
   });
 
-  it('GET /api/themes', () => {
-    return request(app.getHttpServer()).get('/api/themes').expect(200);
+  it.each(['/api/themes', '/api/magazines', '/api/announcements'])('GET %s returns an array', async (url) => {
+    const res = await request(app.getHttpServer()).get(url).expect(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('GET /api/magazines hides unpublished fields', async () => {
+    const res = await request(app.getHttpServer()).get('/api/magazines').expect(200);
+    for (const m of res.body) {
+      expect(m).not.toHaveProperty('published');
+      expect(m).not.toHaveProperty('order');
+    }
   });
 
   afterEach(async () => {

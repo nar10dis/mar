@@ -136,3 +136,44 @@
 .reaction-bubble--selected { border-color: var(--accent-rust-light); background: var(--panel); }
 .reaction-bubble__sprite { display: inline-block; background-repeat: no-repeat; }
 .reaction-bubble__count { min-width: 1.5ch; text-align: left; }
+
+/* ---------------------------------------------------------------- Sélection DS */
+/* 4 petits coins bleus autour de l'élément survolé / focus, comme la sélection
+   des tuiles du menu DS. L'élément doit être positionné (relative/absolute). */
+.ds-select::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+  opacity: 0;
+  --c: var(--accent-blue-light);
+  --l: 12px;
+  --t: 4px;
+  background:
+    linear-gradient(var(--c) 0 0) top left / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) top left / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) top right / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) top right / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) bottom left / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) bottom left / var(--t) var(--l),
+    linear-gradient(var(--c) 0 0) bottom right / var(--l) var(--t),
+    linear-gradient(var(--c) 0 0) bottom right / var(--t) var(--l);
+  background-repeat: no-repeat;
+}
+.ds-select:hover::after,
+.ds-select:focus-visible::after,
+.ds-select:focus-within::after {
+  opacity: 1;
+  animation: ds-select-pulse 0.8s steps(1) infinite;
+}
+/* Les coins servent d'indicateur de focus : pas besoin du contour pointillé en plus */
+.ds-select:focus-visible { outline: none; }
+
+/* Petit « battement » en 2 positions, comme sur la DS */
+@keyframes ds-select-pulse {
+  0% { inset: -8px; }
+  50% { inset: -6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-select:hover::after, .ds-select:focus-visible::after, .ds-select:focus-within::after { animation: none; }
+}

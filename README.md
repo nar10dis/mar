@@ -10,12 +10,13 @@ web/                       front React + Vite (TypeScript)
   public/assets/           pixel art (placeholders pour l'instant, voir plus bas)
   src/styles/tokens.css    palette, polices, interligne
   src/components/          Cartouche, Window98, PixelButton, PixelIcon, ReactionBubble
-  src/map/map.config.ts    image de la carte + positions des POI
-  src/pages/               pages (Shop, Actu, Blog, Archives = vides pour l'instant)
+  src/map/map.config.ts    images de la carte (paysage + portrait), positions des POI et de l'horloge
+  src/pages/               pages (Blog et Archives encore vides)
+  src/content/about.ts     texte « Qui sommes-nous » (Actu)
 api/                       back NestJS 12 (ESM) + Prisma
   prisma/schema.prisma     modèle de données complet (cf. roadmap)
   prisma/migrations/       migrations SQL (à commiter)
-  prisma/seed.ts           seed des 7 thèmes (idempotent, tourne à chaque déploiement)
+  prisma/seed.ts           thèmes + contenu de démo (idempotent, tourne à chaque déploiement)
 Dockerfile                 build front + back en une image
 railway.json               config de déploiement Railway
 docker-compose.yml         Postgres local (port 5433)
@@ -25,8 +26,10 @@ docker-compose.yml         Postgres local (port 5433)
 
 | URL | Contenu |
 |---|---|
-| `/` | Carte + 4 POI |
-| `/shop`, `/actu`, `/blog`, `/archives` | Pages vides, remplies aux phases 2 à 6 |
+| `/` | Carte + 4 POI + horloge. Carte verticale si l'écran est plus haut que large |
+| `/shop` | Magazines (`GET /api/magazines`), bouton « Commander » vers HelloAsso |
+| `/actu` | « Qui sommes-nous » (`web/src/content/about.ts`) + annonces (`GET /api/announcements`) |
+| `/blog`, `/archives` | Pages vides, remplies aux phases 4 à 6 |
 | `/design` | Démo du design system : palette, composants, assets, thèmes lus en BDD |
 
 ## Dev local
@@ -57,11 +60,20 @@ Tous les fichiers de `web/public/assets/` sont des **placeholders** générés a
 même taille**, aucun changement de code nécessaire.
 
 - Affichage ×2, toujours en `image-rendering: pixelated`.
-- Sprite sheets horizontales : `poi-*.png` (2 frames 32×32 : normal, hover), `reactions.png`
-  (9 bulles 16×16, ordre de l'enum `ReactionKind`).
+- Sprite sheet horizontale : `reactions.png` (9 bulles 16×16, ordre de l'enum `ReactionKind`).
+- `poi-*.png` : une seule image 32×32. La sélection (4 coins bleus) est en CSS.
 - `frame.png` et `window.png` : 9-slice, coins de 8 px.
-- Carte : remplacer `map.png` (1920×1080), puis ajuster les positions en % dans `web/src/map/map.config.ts`.
+- Carte : `map.png` (1920×1080, écran paysage) et `map-portrait.png` (1080×1920, écran plus haut
+  que large). Après remplacement, ajuster les positions en % dans `web/src/map/map.config.ts`
+  (POI et horloge, une position par orientation).
 - Nouvelle icône UI : `icon-<nom>.png` en 16×16, puis `<PixelIcon src={asset('icon-<nom>.png')} size={16} />`.
+
+## Contenu de démo
+
+Le seed crée 4 magazines et 3 annonces **placeholders**, uniquement si les tables sont vides
+(couvertures dans `web/public/assets/covers/`, liens HelloAsso génériques).
+Quand le vrai contenu arrive, mettre `SEED_DEMO=false` dans les variables Railway, sinon un admin
+qui vide une table verrait la démo revenir au déploiement suivant.
 
 ## Déploiement (Railway)
 

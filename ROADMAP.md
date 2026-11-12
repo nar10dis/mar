@@ -1,7 +1,7 @@
 # Mort aux Rats — Roadmap du site
 
 > Refonte complète de mortauxrats.fr (l'ancien site ne sert pas de base).
-> Version **ordi uniquement** pour l'instant, mobile en bonus.
+> Version **ordi** en priorité. Si l'écran est plus haut que large, la carte passe à la verticale ; le reste du mobile est en bonus.
 
 ---
 
@@ -43,6 +43,8 @@
 - **Fond** : quadrillage fin façon menu DS, mais sombre.
 - **Cartouche d'article** : fond `--paper`, lignes pointillées horizontales alignées sur l'interligne (comme la fiche de description d'un Pokémon), coins arrondis pixel, bordure épaisse.
 - **Menus / fenêtres** : style Windows 98 (ombre dure, séparateurs gravés, icônes 16 px).
+- **Sélection** : au survol / focus, 4 petits coins bleus autour de l'élément (comme la sélection des tuiles du menu DS), avec un léger battement. Classe `.ds-select`.
+- **Horloge** : vieille horloge façon horloge DS (cadran carré quadrillé, chiffres pixel, trotteuse rouille), à l'heure réelle, sur le côté droit de la carte.
 - **Roue des thèmes** : disque à cercles concentriques (bleu DS assombri), pastilles colorées en orbite, rotation au clic, thème actif au centre.
 - **Pixel art** : toujours `image-rendering: pixelated`, mise à l'échelle par multiples entiers (×2, ×3).
 - **Aucun asset Nintendo** (sprites, polices) : uniquement des créations originales inspirées.
@@ -59,8 +61,9 @@ En attendant, Claude Code crée des **placeholders** aux bonnes dimensions dans 
 
 | Asset | Fichier | Taille native | Affichage | Notes |
 |---|---|---|---|---|
-| Carte | `map.png` | 1920×1080 | plein écran | Positions des POI en % dans `map.config.ts` |
-| Icônes POI | `poi-{shop,actu,blog,archives}.png` | 32×32 | ×2 | État hover = 2e frame (sheet 64×32) |
+| Carte | `map.png` | 1920×1080 | plein écran | Écran paysage. Positions des POI et de l'horloge en % dans `map.config.ts` |
+| Carte verticale | `map-portrait.png` | 1080×1920 | plein écran | Écran plus haut que large. Positions séparées dans `map.config.ts` |
+| Icônes POI | `poi-{shop,actu,blog,archives}.png` | 32×32 | ×2 | Une seule frame : la sélection est faite en CSS (4 coins bleus) |
 | Bulles de réaction | `reactions.png` | sheet 9 × 16×16 = 144×16 | ×2 | Ordre : cœur, goutte, ?, …, sourire, Zz, !, note, colère |
 | Pastilles roue | `theme-{slug}.png` | 32×32 | ×2 | 7 thèmes + « tous » |
 | Cartouche | `frame.png` | 24×24 | 9-slice, coins 8 px | Via `border-image` |
@@ -106,9 +109,9 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - ✅ **Fini quand** : on navigue entre les 5 pages, la carte se remplace en changeant un seul fichier.
 
 ### Phase 2 — Shop + Actu (lecture)
-- [ ] Shop : grille de magazines (couverture + titre + prix), bouton vers HelloAsso (lien externe, aucun paiement géré)
-- [ ] Actu : bloc intro « qui sommes-nous » + liste d'annonces
-- [ ] Données en BDD via seed
+- [x] Shop : grille de magazines (couverture + titre + prix), bouton vers HelloAsso (lien externe, aucun paiement géré)
+- [x] Actu : bloc intro « qui sommes-nous » + liste d'annonces
+- [x] Données en BDD via seed
 - ✅ **Fini quand** : shop et actu affichent les données de la base.
 
 ### Phase 3 — Comptes + rôles + admin
