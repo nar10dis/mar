@@ -45,6 +45,23 @@ model User {
   comments     Comment[]
   media        Media[]
   inventory    InventorySlot[]
+  sessions     Session[]
+}
+
+/// Sessions de connexion (cookie httpOnly), gérées par @nestjs/authentication.
+/// `id` = SHA-256 du jeton du cookie : le jeton lui-même n'est jamais stocké.
+model Session {
+  id           String   @id
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+  createdAt    DateTime
+  expiresAt    DateTime
+  lastActiveAt DateTime
+  mfa          String?
+  metadata     Json?
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Theme {

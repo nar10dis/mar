@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "setup": "npm install && npm ci --prefix api && npm ci --prefix web",
-    "db:up": "docker compose up -d --wait db",
+    "db:up": "docker compose up -d --wait db s3",
     "db:migrate": "npm run db:migrate --prefix api",
     "db:seed": "npm run db:seed --prefix api",
     "dev:api": "npm run start:dev --prefix api",

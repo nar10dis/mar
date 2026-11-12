@@ -64,3 +64,36 @@ code { font-family: var(--font-ui); font-size: 13px; color: var(--text-muted); }
   .span-2 { grid-column: auto; }
   .actu-about { position: static; }
 }
+
+/* ---------------------------------------------------------------- Comptes */
+.narrow { max-width: 480px; }
+.account-grid { display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start; }
+.avatar-edit { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.avatar-edit__img {
+  width: 128px; height: 128px; object-fit: cover;
+  border: var(--px) solid var(--outline);
+  box-shadow: 4px 4px 0 rgb(0 0 0 / 0.45);
+}
+.avatar-edit .form98 { width: 100%; align-items: stretch; }
+.avatar-edit .pixel-button { justify-content: center; }
+
+/* ---------------------------------------------------------------- Admin */
+.admin-section { display: flex; flex-direction: column; gap: 16px; }
+.admin-section__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.admin-form { margin-bottom: 8px; }
+.admin-form__grid { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: start; }
+.admin-form__cover { display: flex; flex-direction: column; gap: 10px; }
+.admin-form__cover img, .admin-form__cover-empty {
+  width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
+  border: var(--px) solid var(--outline); background: #14110e;
+}
+.admin-form__cover-empty { display: grid; place-items: center; color: var(--text-muted); font-size: 14px; }
+.admin-form__cover .pixel-button { justify-content: center; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.input98--compact { padding: 4px 8px; width: auto; }
+
+@media (max-width: 900px) {
+  .account-grid, .admin-form__grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .admin-form__cover { max-width: 220px; }
+}

@@ -39,13 +39,29 @@ Prérequis : Node 22+, Docker.
 ```bash
 npm run setup                     # installe tout (racine, api, web)
 cp api/.env.example api/.env      # si api/.env n'existe pas
-npm run db:up                     # Postgres sur localhost:5433
+npm run db:up                     # Postgres (localhost:5433) + S3Mock (localhost:9090)
 npx --prefix api prisma migrate deploy && npm run db:seed
 npm run dev                       # api (3000) + web (5173)
 ```
 
 Ouvre http://localhost:5173. Vite redirige `/api` vers Nest, donc le front appelle toujours sa
 propre origine, comme en prod.
+
+Compte admin local : inscris-toi avec un email listé dans `ADMIN_EMAILS` (`api/.env`,
+`admin@example.com` par défaut), il devient ADMIN automatiquement. Back-office : `/admin`.
+
+Tests e2e (`npm run test:e2e --prefix api`) : nécessitent `npm run db:up` (Postgres + S3Mock).
+
+## Comptes et sécurité
+
+- Auth : `@nestjs/authentication` (officiel Nest 12). Session dans un cookie `__Host-sid`
+  (httpOnly, Secure, SameSite=Lax), stockée dans la table `Session` (`PrismaSessionStore`).
+  Mots de passe hashés en scrypt. Protection CSRF globale (`app.enableCsrfProtection()`).
+- Droits : `@nestjs/authorization`. **Toute route est fermée par défaut** : une nouvelle route doit
+  déclarer `@Public()` (visiteurs), `@Can.Anyone()` (connectés) ou `@Can(AdminPolicy, 'manage')`.
+- Uploads : le navigateur envoie le fichier directement au bucket via une URL de PUT signée
+  (type + taille signés), puis l'API vérifie le fichier avant de l'enregistrer. Les fichiers sont
+  servis par `/api/media/<clé>` (redirection vers une URL signée, le bucket étant privé).
 
 ### Modifier le schéma
 
@@ -80,8 +96,31 @@ qui vide une table verrait la démo revenir au déploiement suivant.
 Chaque `git push` sur `main` redéploie. Au démarrage, le conteneur applique les migrations
 (`prisma migrate deploy`), lance le seed (thèmes), puis démarre Nest. Healthcheck : `/api/health`.
 
-Variables du service de l'app : `DATABASE_URL` = `${{Postgres.DATABASE_URL}}` et `PORT` = `3000`
-(doit correspondre au port du domaine dans Settings → Networking).
+### Variables du service de l'app
+
+| Variable | Valeur |
+|---|---|
+| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` |
+| `PORT` | `3000` (doit correspondre au port du domaine dans Settings → Networking) |
+| `ADMIN_EMAILS` | emails des admins, séparés par des virgules |
+| `S3_ENDPOINT` | `${{Bucket.ENDPOINT}}` |
+| `S3_REGION` | `${{Bucket.REGION}}` |
+| `S3_BUCKET` | `${{Bucket.BUCKET}}` |
+| `S3_ACCESS_KEY_ID` | `${{Bucket.ACCESS_KEY_ID}}` |
+| `S3_SECRET_ACCESS_KEY` | `${{Bucket.SECRET_ACCESS_KEY}}` |
+| `S3_CORS_ORIGINS` | l'URL publique du site, ex. `https://mar-production.up.railway.app` |
+| `SEED_DEMO` | `false` quand le vrai contenu est en place |
+
+(`Bucket` = le nom du service bucket dans le projet Railway ; adapter si différent.)
+
+### Bucket (médias)
+
+1. Dans le projet Railway : **+ New → Bucket**.
+2. Ajouter les variables `S3_*` ci-dessus au service de l'app (références vers le bucket).
+3. Mettre l'URL du site dans `S3_CORS_ORIGINS` : au démarrage, l'app configure elle-même le CORS
+   du bucket (log « CORS du bucket : … »). Ajouter le futur domaine (mortauxrats.fr) le moment venu.
+
+Sans bucket configuré, le site tourne normalement, seuls les uploads sont refusés (503).
 
 Tester l'image en local :
 

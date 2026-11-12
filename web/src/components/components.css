@@ -177,3 +177,76 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-select:hover::after, .ds-select:focus-visible::after, .ds-select:focus-within::after { animation: none; }
 }
+
+/* ---------------------------------------------------------------- Champs Win98 */
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field__label { font-size: 16px; }
+.field__hint { margin: 0; font-size: 14px; color: var(--text-muted); }
+.field__error { margin: 0; font-size: 14px; color: var(--accent-rust-light); }
+.input98 {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: #14110e;
+  color: var(--text);
+  font: 400 16px/1.4 var(--font-ui);
+  /* creusé : l'inverse du biseau des boutons */
+  box-shadow:
+    inset var(--px) var(--px) 0 var(--outline),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--bevel-light),
+    inset calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--bevel-dark);
+}
+.input98:focus-visible { outline: var(--px) solid var(--accent-blue-light); outline-offset: 0; }
+.input98[aria-invalid='true'] { box-shadow: inset 0 0 0 var(--px) var(--accent-rust-light); }
+textarea.input98 { min-height: 160px; resize: vertical; }
+select.input98 { cursor: pointer; }
+
+.checkbox98 { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 16px; }
+.checkbox98 input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.checkbox98__box {
+  width: 18px; height: 18px; flex: none;
+  background: #14110e;
+  box-shadow: inset var(--px) var(--px) 0 var(--outline), inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--bevel-light);
+  display: grid; place-items: center;
+}
+.checkbox98 input:checked + .checkbox98__box::after { content: ''; width: 8px; height: 8px; background: var(--accent-rust-light); }
+.checkbox98 input:focus-visible + .checkbox98__box { outline: var(--px) dashed var(--accent-rust-light); outline-offset: 2px; }
+
+.form98 { display: flex; flex-direction: column; gap: 16px; }
+.form98__actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.form-error { margin: 0; padding: 8px 10px; background: rgb(168 69 46 / 0.2); border-left: 4px solid var(--accent-rust); }
+
+/* ---------------------------------------------------------------- Onglets Win98 */
+.tabs98__list { display: flex; gap: 2px; flex-wrap: wrap; position: relative; z-index: 1; }
+.tabs98__tab {
+  padding: 8px 14px 6px;
+  border: none;
+  background: var(--panel);
+  color: var(--text-muted);
+  font: 400 16px/1 var(--font-ui);
+  cursor: pointer;
+  box-shadow: inset var(--px) var(--px) 0 var(--bevel-light), inset calc(var(--px) * -1) 0 0 var(--outline);
+  margin-top: 4px;
+}
+.tabs98__tab[aria-selected='true'] { color: var(--text); margin-top: 0; padding-bottom: 10px; margin-bottom: calc(var(--px) * -1); }
+.tabs98__panel {
+  padding: 16px;
+  background: var(--panel);
+  box-shadow:
+    inset var(--px) var(--px) 0 var(--bevel-light),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--outline);
+}
+
+/* ---------------------------------------------------------------- Tableau (liste Win98) */
+.table98 { width: 100%; border-collapse: collapse; background: #14110e; font-size: 15px; }
+.table98 th { text-align: left; padding: 6px 10px; background: var(--panel); box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light); font-weight: 400; color: var(--text-muted); }
+.table98 td { padding: 8px 10px; border-bottom: 1px solid var(--grid); vertical-align: middle; }
+.table98 tr:hover td { background: rgb(74 106 138 / 0.18); }
+.table98__actions { display: flex; gap: 8px; justify-content: flex-end; }
+.table98__thumb { width: 36px; height: 48px; object-fit: cover; display: block; border: var(--px) solid var(--outline); }
+.table-wrap { overflow-x: auto; }
+.badge { display: inline-block; padding: 1px 8px; font-size: 13px; border: var(--px) solid currentColor; }
+.badge--rust { color: var(--accent-rust-light); }
+.badge--blue { color: var(--accent-blue-light); }
+.badge--muted { color: var(--text-muted); }
+.pixel-button--small { min-height: 30px; padding: 4px 10px; font-size: 14px; }

@@ -44,3 +44,11 @@
   .page__title { font-size: 24px; }
   .page__actions { margin-left: 0; width: 100%; flex-wrap: wrap; }
 }
+
+.status-bar__right { display: flex; align-items: center; gap: 14px; }
+.status-bar__link { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 2px 4px; }
+.status-bar__link:hover { background: var(--bevel-mid); }
+.status-bar__avatar { width: 20px; height: 20px; object-fit: cover; border: 1px solid var(--outline); }
+@media (max-width: 520px) {
+  .status-bar__clock, .status-bar__right > .status-bar__sep { display: none; }
+}

@@ -9,10 +9,13 @@ import './components/components.css';
 import './layout/layout.css';
 import './map/map.css';
 import './pages/pages.css';
+import { AuthProvider } from './auth/AuthContext.tsx';
 import { router } from './router.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );

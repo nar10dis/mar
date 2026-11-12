@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
+import { Public } from '@nestjs/authentication';
 import { PrismaService } from '../prisma/prisma.service.js';
 
+@Public()
 @Controller('announcements')
 export class AnnouncementsController {
   constructor(private readonly prisma: PrismaService) {}

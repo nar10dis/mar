@@ -1,21 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { App } from 'supertest/types.js';
-import { AppModule } from './../src/app.module.js';
+import { createApp } from './helpers.js';
 
-// Requires the database to be running (npm run db:up at the repo root).
-describe('API (e2e)', () => {
-  let app: INestApplication<App>;
+// Requiert Postgres : npm run db:up à la racine.
+describe('API publique (e2e)', () => {
+  let app: INestApplication;
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+  beforeAll(async () => {
+    app = await createApp();
+  });
 
-    app = moduleFixture.createNestApplication();
-    app.setGlobalPrefix('api');
-    await app.init();
+  afterAll(async () => {
+    await app.close();
   });
 
   it('GET /api/health', () => {
@@ -35,7 +31,7 @@ describe('API (e2e)', () => {
     }
   });
 
-  afterEach(async () => {
-    await app.close();
+  it('GET /api/media refuses keys outside the served prefixes', async () => {
+    await request(app.getHttpServer()).get('/api/media/secret/file.txt').expect(404);
   });
 });

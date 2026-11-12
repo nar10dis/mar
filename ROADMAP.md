@@ -115,10 +115,10 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - ✅ **Fini quand** : shop et actu affichent les données de la base.
 
 ### Phase 3 — Comptes + rôles + admin
-- [ ] Inscription / connexion email + mot de passe (hash argon2 ou bcrypt), session JWT en cookie httpOnly
-- [ ] Pseudo modifiable, avatar uploadable
-- [ ] Rôles : tout le monde est `USER` (rédacteur), certains `ADMIN`
-- [ ] Back-office admin simple : CRUD magazines + annonces, suppression d'articles et de commentaires, changement de rôle
+- [x] Inscription / connexion email + mot de passe (hash scrypt via `@nestjs/authentication`), session en cookie httpOnly stockée en BDD (plutôt qu'un JWT : révocable)
+- [x] Pseudo modifiable, avatar uploadable
+- [x] Rôles : tout le monde est `USER` (rédacteur), certains `ADMIN` (`ADMIN_EMAILS` + changement de rôle dans l'admin)
+- [x] Back-office admin simple : CRUD magazines + annonces, suppression d'articles et de commentaires, changement de rôle
 - ✅ **Fini quand** : un admin modifie un magazine sans toucher au code.
 
 ### Phase 4 — Éditeur d'articles + médias

@@ -14,5 +14,17 @@ services:
       interval: 2s
       retries: 15
 
+  # Stockage S3 local (remplace le bucket Railway en dev)
+  s3:
+    image: adobe/s3mock:5.2.3
+    environment:
+      COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: mar-demo
+      COM_ADOBE_TESTING_S3MOCK_STORE_RETAIN_FILES_ON_EXIT: "true"
+    ports:
+      - "9090:9090"
+    volumes:
+      - s3-data:/s3mockroot
+
 volumes:
   db-data:
+  s3-data:

@@ -28,6 +28,16 @@ async function main() {
   }
   console.log(`Seed: ${themes.length} thèmes.`);
 
+  // Comptes listés dans ADMIN_EMAILS : promus ADMIN (ceux qui s'inscrivent plus tard le sont à l'inscription).
+  const admins = (process.env.ADMIN_EMAILS ?? '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+  if (admins.length) {
+    const { count } = await prisma.user.updateMany({
+      where: { email: { in: admins }, role: 'USER' },
+      data: { role: 'ADMIN' },
+    });
+    if (count) console.log(`Seed: ${count} compte(s) promu(s) ADMIN.`);
+  }
+
   // Contenu de démo : seulement si la table est vide, et désactivable en prod
   // avec SEED_DEMO=false (sinon un admin qui vide la table le verrait revenir).
   if (process.env.SEED_DEMO === 'false') return;
