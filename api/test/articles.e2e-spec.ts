@@ -95,9 +95,11 @@ describe('Articles (e2e)', () => {
     expect(list.body.items.some((a: { id: number }) => a.id === articleId)).toBe(true);
     const mine = list.body.items.find((a: { id: number }) => a.id === articleId);
     expect(mine.excerpt).toBe('Du gras');
+    expect(mine.readingMinutes).toBe(1);
     expect(mine).not.toHaveProperty('content');
     const one = await http().get(`/api/articles/${articleId}`).expect(200);
     expect(one.body.title).toBe('Un article mixte');
+    expect(one.body.readingMinutes).toBe(1);
     await http().get('/api/articles/999999999').expect(404);
   });
 

@@ -22,6 +22,8 @@
   position: absolute;
   left: calc(var(--x) * 1%);
   top: calc(var(--y) * 1%);
+  width: calc(var(--w) * 1%);
+  height: calc(var(--h) * 1%);
 }
 
 /* ---- Portrait : écran plus haut que large => carte verticale */
@@ -30,26 +32,58 @@
     aspect-ratio: 1080 / 1920;
     width: min(100%, calc((100cqh - 8px) * 9 / 16));
   }
-  .poi { left: calc(var(--xp) * 1%); top: calc(var(--yp) * 1%); }
+  .poi {
+    left: calc(var(--xp) * 1%);
+    top: calc(var(--yp) * 1%);
+    width: calc(var(--wp) * 1%);
+    height: calc(var(--hp) * 1%);
+  }
 }
 
-/* ---- POI */
+/* ---- POI : le lien recouvre exactement l'encadré clair de la carte, et son contenu
+   (icône + étiquette) est dimensionné en % de l'encadré (cqh/cqw) : rien ne dépasse,
+   quelle que soit la taille de la carte. */
 .poi {
+  container-type: size;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 4px;
-  transform: translate(-50%, -36px); /* centre de l'icône sur la position */
+  justify-content: center;
+  gap: 6cqh;
+  /* 4 px de bordure claire sur 116 px d'encadré ≈ 3.5 % : on reste à l'intérieur */
+  padding: 8cqh 6cqw;
   color: var(--ink);
   text-decoration: none;
 }
+.poi:hover { background: rgb(232 220 196 / 0.08); }
+.poi__icon {
+  height: 44cqh;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 2px 0 rgb(0 0 0 / 0.45));
+}
 .poi__label {
-  padding: 2px 8px;
+  max-width: 100%;
+  padding: 1cqh 6cqw;
+  overflow: hidden;
   background: var(--paper);
   border: var(--px) solid var(--outline);
-  font-size: 16px;
+  font-size: clamp(9px, 17cqh, 18px);
   line-height: 1.2;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.45);
+  box-shadow: 2px 2px 0 rgb(0 0 0 / 0.45);
+}
+
+/* Coins de sélection DS à l'intérieur de l'encadré (et non 8 px autour comme ailleurs) */
+.poi.ds-select::after { inset: 4px; }
+/* (seulement si l'animation est permise : sinon on écraserait le « animation: none » de components.css) */
+@media (prefers-reduced-motion: no-preference) {
+  .poi.ds-select:hover::after,
+  .poi.ds-select:focus-visible::after,
+  .poi.ds-select:focus-within::after { animation-name: poi-select-pulse; }
+}
+@keyframes poi-select-pulse {
+  0% { inset: 4px; }
+  50% { inset: 6px; }
 }

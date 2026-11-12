@@ -85,8 +85,8 @@ même taille**, aucun changement de code nécessaire.
 - `poi-*.png` : une seule image 32×32. La sélection (4 coins bleus) est en CSS.
 - `frame.png` et `window.png` : 9-slice, coins de 8 px.
 - Carte : `map.png` (1920×1080, écran paysage) et `map-portrait.png` (1080×1920, écran plus haut
-  que large). Après remplacement, ajuster les positions en % dans `web/src/map/map.config.ts`
-  (POI, une position par orientation).
+  que large). Après remplacement, ajuster les encadrés des POI en % dans `web/src/map/map.config.ts`
+  (coin haut-gauche + taille de l'encadré clair, un par orientation).
 - Nouvelle icône UI : `icon-<nom>.png` en 16×16, puis `<PixelIcon src={asset('icon-<nom>.png')} size={16} />`.
 
 ## Contenu de démo

@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
-import { PixelIcon } from '../components/PixelIcon.tsx';
 import { MAP, POIS } from './map.config.ts';
 
 // Les positions paysage / portrait passent en variables CSS : le basculement se fait
@@ -24,9 +23,19 @@ export function MapPage() {
               key={poi.id}
               to={poi.path}
               className="poi ds-select"
-              style={vars({ x: poi.landscape.x, y: poi.landscape.y, xp: poi.portrait.x, yp: poi.portrait.y })}
+              style={vars({
+                x: poi.landscape.x,
+                y: poi.landscape.y,
+                w: poi.landscape.w,
+                h: poi.landscape.h,
+                xp: poi.portrait.x,
+                yp: poi.portrait.y,
+                wp: poi.portrait.w,
+                hp: poi.portrait.h,
+              })}
             >
-              <PixelIcon src={poi.icon} size={32} />
+              {/* <img> plutôt que PixelIcon : sa taille suit celle de l'encadré (cqh), pas une taille fixe en px */}
+              <img className="poi__icon" src={poi.icon} alt="" draggable={false} />
               <span className="poi__label">{poi.label}</span>
             </Link>
           ))}

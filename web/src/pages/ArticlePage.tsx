@@ -1,6 +1,10 @@
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { ArticleContent } from '../article/ArticleContent.tsx';
 import { ArticleMeta } from '../article/ArticleMeta.tsx';
+import { articleHeadings } from '../article/headings.ts';
+import { ScrollButtons } from '../article/ScrollButtons.tsx';
+import { TableOfContents } from '../article/TableOfContents.tsx';
 import { useAuth } from '../auth/useAuth.ts';
 import { Cartouche } from '../components/Cartouche.tsx';
 import { PixelButton } from '../components/PixelButton.tsx';
@@ -18,6 +22,9 @@ import { Reactions } from '../social/Reactions.tsx';
 export function ArticlePage() {
   const { id } = useParams();
   const article = useApi<Article>(`/api/articles/${id}`);
+  // Calculé une fois par article : le sommaire suit la lecture sans se réinitialiser.
+  const headings = useMemo(() => (article.status === 'ready' ? articleHeadings(article.data.content) : []), [article]);
+  const hasToc = headings.length >= 2;
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -67,12 +74,25 @@ export function ArticlePage() {
         </PixelButton>
         <ArticleMeta article={a} />
       </div>
-      {a.coverUrl && <img className="article-cover" src={a.coverUrl} alt="" />}
-      <Cartouche className="cartouche--article">
-        <ArticleContent content={a.content} />
-      </Cartouche>
-      <Reactions articleId={a.id} />
-      <Comments articleId={a.id} />
+      <div className="article-layout">
+        <div>
+          {hasToc && <TableOfContents headings={headings} variant="compact" />}
+          {a.coverUrl && <img className="article-cover" src={a.coverUrl} alt="" />}
+          <Cartouche className="cartouche--article">
+            <ArticleContent content={a.content} />
+          </Cartouche>
+          <div id="fin-article">
+            <Reactions articleId={a.id} />
+          </div>
+          <Comments articleId={a.id} />
+        </div>
+        {hasToc && (
+          <aside className="article-layout__aside">
+            <TableOfContents headings={headings} variant="aside" />
+          </aside>
+        )}
+      </div>
+      <ScrollButtons endId="fin-article" />
     </PageLayout>
   );
 }

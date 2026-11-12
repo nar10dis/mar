@@ -61,7 +61,7 @@ En attendant, Claude Code crée des **placeholders** aux bonnes dimensions dans 
 
 | Asset | Fichier | Taille native | Affichage | Notes |
 |---|---|---|---|---|
-| Carte | `map.png` | 1920×1080 | plein écran | Écran paysage. Positions des POI en % dans `map.config.ts` |
+| Carte | `map.png` | 1920×1080 | plein écran | Écran paysage. Encadrés des POI en % dans `map.config.ts` |
 | Carte verticale | `map-portrait.png` | 1080×1920 | plein écran | Écran plus haut que large. Positions séparées dans `map.config.ts` |
 | Icônes POI | `poi-{shop,actu,blog,archives}.png` | 32×32 | ×2 | Une seule frame : la sélection est faite en CSS (4 coins bleus) |
 | Bulles de réaction | `reactions.png` | sheet 9 × 16×16 = 144×16 | ×2 | Ordre : cœur, goutte, ?, …, sourire, Zz, !, note, colère |

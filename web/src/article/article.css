@@ -47,6 +47,83 @@
 .article-cover { display: block; width: 100%; max-height: 420px; object-fit: cover; border: var(--px) solid var(--outline); margin: 16px 0 24px; }
 .article-head { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
 
+/* ---------------------------------------------------------------- Lecture : sommaire + boutons */
+.rich-text h2, .rich-text h3 { scroll-margin-top: 16px; }
+
+.article-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
+.article-layout__aside { display: none; }
+.toc--compact { margin-bottom: 16px; }
+
+/* Écran DS assez large : sommaire collé à droite (container query sur l'écran, pas la fenêtre) */
+@container ds-main (min-width: 980px) {
+  .article-layout { grid-template-columns: minmax(0, 1fr) 220px; }
+  .article-layout__aside { display: block; position: sticky; top: 16px; }
+  .toc--compact { display: none; }
+}
+
+.toc {
+  background: var(--panel);
+  border: var(--px) solid var(--outline);
+  box-shadow: inset var(--px) var(--px) 0 var(--bevel-light), 4px 4px 0 rgb(0 0 0 / 0.45);
+  font-size: 15px;
+}
+.toc__title, .toc--compact summary {
+  padding: 4px 10px;
+  background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue));
+  color: #eef4fa;
+  font-weight: 700;
+}
+.toc--compact summary { cursor: pointer; }
+.toc__list { list-style: none; margin: 0; padding: 8px 6px; max-height: 60cqh; overflow: auto; }
+.toc__item a {
+  display: block;
+  padding: 4px 6px 4px 20px;
+  color: var(--text-muted);
+  text-decoration: none;
+  line-height: 1.3;
+  position: relative;
+}
+.toc__item--h3 a { padding-left: 34px; font-size: 14px; }
+.toc__item a:hover { color: var(--text); background: rgb(74 106 138 / 0.18); }
+/* Section en cours : curseur ▶ comme dans les menus Pokémon */
+.toc__item a[aria-current] { color: var(--text); }
+.toc__item a[aria-current]::before {
+  content: '▶';
+  position: absolute;
+  left: 4px;
+  color: var(--accent-rust-light);
+  font-size: 11px;
+  line-height: 1.9;
+}
+.toc__item--h3 a[aria-current]::before { left: 18px; }
+
+/* Boutons flottants : collés en bas de l'écran DS pendant tout le défilement */
+.scroll-buttons {
+  position: sticky;
+  bottom: 16px;
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  pointer-events: none; /* seuls les boutons captent les clics */
+}
+.scroll-buttons__btn {
+  pointer-events: auto;
+  padding: 8px 12px;
+  border: none;
+  background: var(--panel);
+  color: var(--text);
+  font: 400 15px/1 var(--font-ui);
+  cursor: pointer;
+  box-shadow:
+    inset -2px -2px 0 var(--outline),
+    inset 2px 2px 0 var(--bevel-light),
+    4px 4px 0 rgb(0 0 0 / 0.45);
+}
+.scroll-buttons__btn:hover { filter: brightness(1.15); }
+.scroll-buttons__btn:active { box-shadow: inset 2px 2px 0 var(--outline); }
+
 /* Liste d'articles (blog, en attendant le vrai fil de la phase 5) */
 .article-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
 .article-card { position: relative; display: grid; grid-template-columns: 160px 1fr; gap: 16px; padding: 12px; background: var(--panel); border: var(--px) solid var(--outline); color: inherit; text-decoration: none; }

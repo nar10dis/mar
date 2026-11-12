@@ -69,6 +69,8 @@ export interface ArticleSummary {
   createdAt: string;
   theme: { slug: string; name: string; color: string };
   author: { id: number; pseudo: string; avatarUrl: string | null };
+  /** Estimation : 200 mots/min + 10 s par image, 1 min minimum (api/src/articles/reading-time.ts) */
+  readingMinutes: number;
 }
 
 export interface Article extends ArticleSummary {

@@ -7,6 +7,7 @@ import { keyFromMediaUrl } from '../storage/upload-rules.js';
 import { UploadsService } from '../storage/uploads.service.js';
 import { mediaRefs } from './article-content.schema.js';
 import type { ArticleContent, ArticleInput } from './article-content.schema.js';
+import { readingMinutes } from './reading-time.js';
 
 const LIST_SELECT = {
   id: true,
@@ -57,6 +58,7 @@ export class ArticlesService {
       items: page.map(({ content, _count, ...a }) => ({
         ...a,
         excerpt: excerptOf(content as unknown as ArticleContent),
+        readingMinutes: readingMinutes(content as unknown as ArticleContent),
         commentCount: _count.comments,
         reactionCount: _count.reactions,
       })),
@@ -70,7 +72,7 @@ export class ArticlesService {
       select: { ...LIST_SELECT, content: true, updatedAt: true, themeId: true },
     });
     if (!article) throw new NotFoundException('Article introuvable');
-    return article;
+    return { ...article, readingMinutes: readingMinutes(article.content as unknown as ArticleContent) };
   }
 
   async create(user: AuthUser, input: ArticleInput) {
