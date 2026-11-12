@@ -4,6 +4,8 @@ import { RootLayout } from './layout/RootLayout.tsx';
 import { MapPage } from './map/MapPage.tsx';
 import { DesignPage } from './pages/DesignPage.tsx';
 import { AccountPage } from './pages/AccountPage.tsx';
+import { ProfilePage } from './pages/ProfilePage.tsx';
+import { LegalPage } from './pages/LegalPage.tsx';
 import { ActuPage } from './pages/ActuPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
 import { LoginPage } from './pages/LoginPage.tsx';
@@ -46,6 +48,15 @@ export const router = createBrowserRouter([
       { path: '/archives', element: <ArchivesPage /> },
       { path: '/design', element: <DesignPage /> },
       { path: '/connexion', element: <LoginPage /> },
+      { path: '/mentions-legales', element: <LegalPage /> },
+      {
+        path: '/profil',
+        element: (
+          <RequireAuth>
+            <ProfilePage />
+          </RequireAuth>
+        ),
+      },
       {
         path: '/compte',
         element: (

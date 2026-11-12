@@ -7,6 +7,7 @@ import { idParam } from '../admin/admin.schemas.js';
 import type { AuthUser } from '../auth/auth.types.js';
 import { ReactionKind } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { RateLimit } from '../rate-limit/rate-limit.js';
 import { ensureVoterKey, voterKey } from './voter.js';
 
 const reactSchema = z.object({ kind: z.enum(Object.values(ReactionKind) as [ReactionKind, ...ReactionKind[]]) });
@@ -27,6 +28,7 @@ export class ReactionsController {
     return this.summary(id, voterKey(req, user));
   }
 
+  @RateLimit('reaction')
   @Put()
   async react(
     @Param('id', { schema: idParam }) id: number,
@@ -45,6 +47,7 @@ export class ReactionsController {
     return this.summary(id, key);
   }
 
+  @RateLimit('reaction')
   @Delete()
   async unreact(@Param('id', { schema: idParam }) id: number, @CurrentUser() user: AuthUser | null, @Req() req: Request) {
     await this.requireArticle(id);

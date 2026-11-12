@@ -10,8 +10,9 @@ import { PageLayout } from '../layout/PageLayout.tsx';
 import { api, errorText } from '../lib/api.ts';
 import { asset } from '../lib/assets.ts';
 import { IMAGE_ACCEPT, uploadImage } from '../lib/upload.ts';
+import { DeleteAccount } from './DeleteAccount.tsx';
 
-/** Réglages du compte : pseudo, avatar, déconnexion. (Le profil avec l'inventaire arrive en phase 7.) */
+/** Réglages du compte : pseudo, avatar, déconnexion. (Le profil et le sac : /profil.) */
 export function AccountPage() {
   const { user, setUser, signOut } = useAuth();
   const navigate = useNavigate();
@@ -132,6 +133,7 @@ export function AccountPage() {
           </form>
         </Window98>
       </div>
+      <DeleteAccount />
     </PageLayout>
   );
 }

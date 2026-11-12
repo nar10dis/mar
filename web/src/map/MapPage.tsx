@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { MAP, POIS } from './map.config.ts';
+import { MapPixels } from './MapPixels.tsx';
 
 // Les positions paysage / portrait passent en variables CSS : le basculement se fait
 // en pur CSS avec @media (orientation: portrait), sans JS ni re-render.
@@ -16,6 +17,7 @@ export function MapPage() {
           <source media="(orientation: portrait)" srcSet={MAP.portrait.image} />
           <img className="map__image" src={MAP.landscape.image} alt="" draggable={false} />
         </picture>
+        <MapPixels />
 
         <nav aria-label="Lieux">
           {POIS.map((poi) => (

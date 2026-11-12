@@ -8,12 +8,11 @@
   justify-content: space-between;
   height: var(--status-h);
   padding: 0 16px;
-  background: var(--panel);
-  border-bottom: var(--px) solid var(--outline);
-  box-shadow: inset 0 calc(var(--px) * -1) 0 var(--bevel-mid);
-  font-size: 16px;
+  background: var(--accent-blue-dark);
+  box-shadow: 0 4px 0 var(--shadow);
+  font: 400 16px/1 var(--font-ui);
 }
-.status-bar__name { color: var(--text); text-decoration: none; letter-spacing: 1px; }
+.status-bar__name { color: #eef4fa; text-decoration: none; letter-spacing: 1px; }
 
 /* ---------------------------------------------------------------- Écrans DS */
 /* Deux écrans : le contenu (.ds__main) et les widgets (.ds__widgets).
@@ -101,6 +100,11 @@
 }
 
 .status-bar__right { display: flex; align-items: center; gap: 14px; }
-.status-bar__link { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 2px 4px; }
-.status-bar__link:hover { background: var(--bevel-mid); }
+.status-bar__link { color: #dbe6f0; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px; clip-path: var(--notch-sm); }
+.status-bar__link:hover { background: #24364a; }
 .status-bar__avatar { width: 20px; height: 20px; object-fit: cover; border: 1px solid var(--outline); }
+
+.status-bar__legal { color: #a9bccd; }
+@media (max-width: 700px) {
+  .status-bar__legal-text { display: none; }
+}

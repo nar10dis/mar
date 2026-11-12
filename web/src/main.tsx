@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 import '@fontsource/pixelify-sans/400.css';
 import '@fontsource/pixelify-sans/700.css';
+import '@fontsource-variable/space-grotesk';
 import './styles/tokens.css';
 import './styles/global.css';
 import './components/components.css';

@@ -76,7 +76,7 @@ export function Comments({ articleId }: { articleId: number }) {
           >
             {isCollapsed ? '+' : '–'}
           </button>
-          <img className="comment__avatar" src={c.author.avatarUrl ?? asset('avatar-default.png')} alt="" />
+          <img className="comment__avatar" src={c.author.avatarUrl ?? asset('avatar-default.png')} alt="" loading="lazy" />
           <span className="comment__author">{c.author.pseudo}</span>
           <time className="comment__date" dateTime={c.createdAt}>
             {dateTime.format(new Date(c.createdAt))}

@@ -14,12 +14,19 @@ body {
     linear-gradient(90deg, var(--grid) var(--px), transparent var(--px));
   background-size: 32px 32px;
   color: var(--text);
-  font-family: var(--font-ui);
+  /* Textes en Space Grotesk ; titres, boutons et étiquettes repassent en pixel (--font-ui). */
+  font-family: var(--font-text);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Police pixel : pas de lissage, sinon les pixels bavent */
+h1, h2, h3, button, .font-ui {
   -webkit-font-smoothing: none;
   font-smooth: never;
 }
+.font-ui { font-family: var(--font-ui); }
 
 img, .pixel { image-rendering: pixelated; }
 

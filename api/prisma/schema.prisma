@@ -169,4 +169,6 @@ model InventorySlot {
   articleId Int
 
   @@unique([userId, position])
+  /// Un même article n'occupe qu'une case du sac
+  @@unique([userId, articleId])
 }

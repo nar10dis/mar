@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Navigate, useNavigate, useSearchParams } from 'react-router';
+import { Navigate, useNavigate, useSearchParams, Link } from 'react-router';
 import { useAuth } from '../auth/useAuth.ts';
 import { TextField } from '../components/Field.tsx';
 import { PixelButton } from '../components/PixelButton.tsx';
@@ -87,6 +87,11 @@ export function LoginPage() {
               {error && (
                 <p className="form-error" role="alert">
                   {error}
+                </p>
+              )}
+              {mode === 'sign-up' && (
+                <p className="field__hint">
+                  Ce qu’on fait de tes données : <Link to="/mentions-legales">mentions légales et confidentialité</Link>.
                 </p>
               )}
               <div className="form98__actions">

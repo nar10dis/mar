@@ -17,6 +17,7 @@ import { useApi } from '../lib/useApi.ts';
 import { poiById } from '../map/map.config.ts';
 import { Comments } from '../social/Comments.tsx';
 import { Reactions } from '../social/Reactions.tsx';
+import { BagButton } from '../profile/BagButton.tsx';
 
 /** Lecture d'un article : contenu, réactions en bulles, commentaires en fil. */
 export function ArticlePage() {
@@ -56,16 +57,15 @@ export function ArticlePage() {
     <PageLayout
       title={a.title}
       actions={
-        (isAuthor || canDelete) && (
-          <>
-            {isAuthor && (
-              <PixelButton to={`/blog/articles/${a.id}/modifier`} icon={asset('icon-nouvel-article.png')}>
-                Modifier
-              </PixelButton>
-            )}
-            {canDelete && <PixelButton onClick={remove}>Supprimer</PixelButton>}
-          </>
-        )
+        <>
+          <BagButton articleId={a.id} authorId={a.author.id} />
+          {isAuthor && (
+            <PixelButton to={`/blog/articles/${a.id}/modifier`} icon={asset('icon-nouvel-article.png')}>
+              Modifier
+            </PixelButton>
+          )}
+          {canDelete && <PixelButton onClick={remove}>Supprimer</PixelButton>}
+        </>
       }
     >
       <div className="article-head">

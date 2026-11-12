@@ -11,6 +11,10 @@ export function StatusBar() {
         MORT AUX RATS
       </Link>
       <div className="status-bar__right">
+        <Link to="/mentions-legales" className="status-bar__link status-bar__legal" aria-label="Mentions légales et confidentialité">
+          <span aria-hidden>ⓘ</span>
+          <span className="status-bar__legal-text">Mentions légales</span>
+        </Link>
         {user?.role === 'ADMIN' && (
           <Link to="/admin" className="status-bar__link">
             Admin

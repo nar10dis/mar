@@ -6,7 +6,7 @@ import { formatDate } from '../lib/format.ts';
 export function ArticleMeta({ article }: { article: ArticleSummary }) {
   return (
     <div className="article-meta">
-      <img className="article-meta__avatar" src={article.author.avatarUrl ?? asset('avatar-default.png')} alt="" />
+      <img className="article-meta__avatar" src={article.author.avatarUrl ?? asset('avatar-default.png')} alt="" loading="lazy" />
       <span>{article.author.pseudo}</span>
       <span className="article-meta__theme">
         <span className="article-meta__dot" style={{ background: article.theme.color }} aria-hidden />

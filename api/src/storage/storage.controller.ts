@@ -4,6 +4,7 @@ import { Can } from '@nestjs/authorization';
 import type { Response } from 'express';
 import { z } from 'zod';
 import type { AuthUser } from '../auth/auth.types.js';
+import { RateLimit } from '../rate-limit/rate-limit.js';
 import { StorageService } from './storage.service.js';
 import { UploadsService } from './uploads.service.js';
 import { UPLOAD_RULES } from './upload-rules.js';
@@ -26,6 +27,7 @@ export class StorageController {
 
   /** Demande d'upload : renvoie une URL de PUT signée, valable 10 min. */
   @Can.Anyone()
+  @RateLimit('upload')
   @Post('uploads')
   prepare(@CurrentUser() user: AuthUser, @Body({ schema: prepareSchema }) body: z.infer<typeof prepareSchema>) {
     return this.uploads.prepare(user, body.purpose, body.contentType, body.size);

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { idParam } from '../admin/admin.schemas.js';
 import type { AuthUser } from '../auth/auth.types.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { RateLimit } from '../rate-limit/rate-limit.js';
 
 const commentSchema = z.object({
   body: z.string().trim().min(1, 'Commentaire vide').max(5000, '5000 caractères maximum'),
@@ -36,6 +37,7 @@ export class CommentsController {
   }
 
   @Can.Anyone()
+  @RateLimit('comment')
   @Post()
   async create(
     @Param('id', { schema: idParam }) id: number,

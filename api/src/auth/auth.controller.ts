@@ -2,6 +2,7 @@ import { Body, ConflictException, Controller, Get, HttpCode, Post, UnauthorizedE
 import { Authenticate, CurrentUser, PasswordHasher, Public, SignInService } from '@nestjs/authentication';
 import { Can } from '@nestjs/authorization';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { RateLimit } from '../rate-limit/rate-limit.js';
 import { adminEmails } from './admin-emails.js';
 import { signInSchema, signUpSchema } from './auth.schemas.js';
 import type { SignInInput, SignUpInput } from './auth.schemas.js';
@@ -17,6 +18,7 @@ export class AuthController {
   ) {}
 
   @Public()
+  @RateLimit('sign-up')
   @Post('sign-up')
   async signUp(@Body({ schema: signUpSchema }) body: SignUpInput): Promise<AuthUser> {
     const taken = await this.prisma.user.findFirst({
@@ -42,6 +44,7 @@ export class AuthController {
   }
 
   @Public()
+  @RateLimit('sign-in')
   @Post('sign-in')
   @HttpCode(200)
   async signIn(@Body({ schema: signInSchema }) body: SignInInput): Promise<AuthUser> {

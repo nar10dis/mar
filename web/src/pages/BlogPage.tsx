@@ -43,7 +43,7 @@ export function BlogPage() {
       poiIcon={poiById('blog').icon}
       actions={
         <>
-          <PixelButton icon={asset('icon-profil.png')} disabled title="Phase 7">
+          <PixelButton icon={asset('icon-profil.png')} to={user ? '/profil' : '/connexion?next=/profil'}>
             Profil
           </PixelButton>
           <PixelButton variant="rust" icon={asset('icon-nouvel-article.png')} to={user ? '/blog/nouveau' : '/connexion?next=/blog/nouveau'}>

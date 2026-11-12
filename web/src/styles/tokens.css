@@ -24,11 +24,18 @@
   --px: 2px;
   --scale: 2;
 
-  /* Typo. --font-text passera sur m5x7 / m6x11 quand la licence sera validée. */
+  /* Typo : pixel pour l'interface (titres, boutons, étiquettes), Space Grotesk pour les textes à lire. */
   --font-ui: 'Pixelify Sans', ui-monospace, monospace;
-  --font-text: 'Pixelify Sans', ui-monospace, monospace;
-  --fs-text: 20px;
+  --font-text: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+  --fs-text: 18px;
   --lh: 32px; /* interligne = pas des pointillés des cartouches */
 
   --status-h: 32px;
+
+  /* Style « console DS » : blocs plats à coins crénelés + ombre dure qui suit les crans.
+     Mode d'emploi dans components.css (section « Blocs crénelés »). */
+  --shadow: #0d0b09;
+  --panel-deep: #221f1b;
+  --notch: polygon(0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0, calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px, 100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%, 8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px));
+  --notch-sm: polygon(0 4px, 4px 4px, 4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px));
 }

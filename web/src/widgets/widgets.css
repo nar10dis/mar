@@ -4,7 +4,7 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  box-shadow: 4px 4px 0 rgb(0 0 0 / 0.45);
+  --box-shadow: 4px;
 }
 .widget__bar { padding: 0 2px; gap: 2px; }
 .widget__title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }

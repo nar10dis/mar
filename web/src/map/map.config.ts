@@ -12,6 +12,12 @@ import { asset } from '../lib/assets.ts';
 export const MAP = {
   landscape: { image: asset('map.png'), width: 1920, height: 1080 },
   portrait: { image: asset('map-portrait.png'), width: 1080, height: 1920 },
+  /**
+   * Couleur du fond de la carte (= --bg). Le quadrillage fin et l'effet de pixels (MapPixels)
+   * ne se dessinent que sur les zones de cette couleur : chemins, encadrés et décors restent nets.
+   * À changer si la nouvelle carte a un autre fond.
+   */
+  background: '#1a1714',
 };
 
 export interface Rect {

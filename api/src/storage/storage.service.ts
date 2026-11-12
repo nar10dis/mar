@@ -4,6 +4,7 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
+  ListObjectsV2Command,
   PutBucketCorsCommand,
   PutObjectCommand,
   S3Client,
@@ -99,5 +100,29 @@ export class StorageService implements OnApplicationBootstrap {
     } catch (e) {
       this.logger.warn(`Suppression de ${key} impossible : ${String(e)}`);
     }
+  }
+
+  /**
+   * Supprime tout ce qui commence par `prefix` (ex. « media/12/ » à la suppression d'un compte).
+   * Best-effort comme deleteQuietly : renvoie le nombre de fichiers supprimés.
+   */
+  async deletePrefix(prefix: string) {
+    if (!this.client || !this.bucket || !prefix.endsWith('/')) return 0;
+    let deleted = 0;
+    let token: string | undefined;
+    try {
+      do {
+        const page = await this.client.send(new ListObjectsV2Command({ Bucket: this.bucket, Prefix: prefix, ContinuationToken: token }));
+        for (const obj of page.Contents ?? []) {
+          if (!obj.Key) continue;
+          await this.client.send(new DeleteObjectCommand({ Bucket: this.bucket, Key: obj.Key }));
+          deleted++;
+        }
+        token = page.IsTruncated ? page.NextContinuationToken : undefined;
+      } while (token);
+    } catch (e) {
+      this.logger.warn(`Suppression de ${prefix}* incomplète : ${String(e)}`);
+    }
+    return deleted;
   }
 }

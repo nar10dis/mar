@@ -114,3 +114,26 @@ export interface ArticleComment {
   createdAt: string;
   author: { id: number; pseudo: string; avatarUrl: string | null };
 }
+
+// ---------------------------------------------------------------- Profil et sac (GET /api/me/…)
+
+/** Article tel qu'il apparaît dans le sac (api/src/inventory/inventory.controller.ts) */
+export interface BagArticle {
+  id: number;
+  title: string;
+  coverUrl: string | null;
+  theme: { slug: string; name: string; color: string };
+  author: { id: number; pseudo: string };
+}
+
+/** GET /api/me/inventory : 8 cases dans l'ordre, null = case vide */
+export type Inventory = (BagArticle | null)[];
+
+/** GET /api/me/profile */
+export interface Profile {
+  pseudo: string;
+  avatarUrl: string | null;
+  createdAt: string;
+  articles: (BagArticle & { createdAt: string })[];
+  inventory: Inventory;
+}

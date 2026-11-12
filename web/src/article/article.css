@@ -38,6 +38,19 @@
 
 .youtube-embed { position: relative; aspect-ratio: 16 / 9; border: var(--px) solid var(--ink); background: #000; }
 .youtube-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.youtube-embed__facade {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  font: inherit; color: var(--text); cursor: pointer; border: 0;
+  background: repeating-linear-gradient(0deg, #14110e 0 2px, #1a1714 2px 4px);
+}
+.youtube-embed__play {
+  display: grid; place-items: center; width: 64px; height: 44px; font-size: 22px;
+  background: var(--accent-rust); border: var(--px) solid var(--outline); box-shadow: 4px 4px 0 rgb(0 0 0 / 0.5);
+}
+.youtube-embed__facade:hover .youtube-embed__play, .youtube-embed__facade:focus-visible .youtube-embed__play { background: var(--accent-rust-light); }
+.youtube-embed__facade:focus-visible { outline: var(--px) solid var(--accent-blue-light); outline-offset: -6px; }
+.youtube-embed__note { font-size: 13px; color: var(--text-muted); }
 
 /* En-tête d'article */
 .article-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--text-muted); font-size: 16px; }

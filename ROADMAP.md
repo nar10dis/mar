@@ -135,7 +135,7 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - [x] Page article dans la cartouche pointillée
 - [x] Réactions en bulles : ouvertes à tous, une par article et par personne, modifiable, compteur par bulle (anonymes : cookie httpOnly `__Host-mar_voter`)
 - [x] Commentaires avec réponses imbriquées façon Reddit, réplier/déplier un fil (suppression : back-office admin)
-- [x] Boutons « profil » et « nouvel article » dans le POI Blog (« profil » actif en phase 7)
+- [x] Boutons « profil » et « nouvel article » dans le POI Blog
 - ✅ **Fini quand** : un visiteur non connecté réagit, un connecté commente et répond à un commentaire.
 
 ### Phase 6 — Archives : roue + recherche + tri
@@ -147,15 +147,15 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - ✅ **Fini quand** : toutes les combinaisons filtre × tri × recherche renvoient le bon résultat.
 
 ### Phase 7 — Profil + inventaire
-- [ ] Page profil (privée, visible seulement par son propriétaire) : pseudo, avatar, articles écrits, inventaire
-- [ ] Inventaire de 8 slots façon sac Pokémon, rempli avec des articles des autres (ajout depuis la page article, retrait, réordonnancement)
+- [x] Page profil `/profil` (privée, visible seulement par son propriétaire) : pseudo, avatar, articles écrits, inventaire — `GET /api/me/profile`
+- [x] Inventaire de 8 slots façon sac Pokémon, rempli avec des articles des autres (ajout depuis la page article, retrait, réordonnancement) — un article n'occupe qu'une case ; réordonner : clic sur deux cases, glisser-déposer ou flèches ←→
 - ✅ **Fini quand** : on remplit, vide et réordonne les 8 slots.
 
 ### Phase 8 — Finitions + mise en ligne
-- [ ] Accessibilité : contrastes, focus clavier, taille de police
-- [ ] Performance : compression et redimensionnement des images à l'upload, lazy-loading
-- [ ] RGPD : mentions légales, suppression de compte, aucun tracking
-- [ ] Rate limiting sur l'auth, les réactions et les commentaires
+- [ ] Accessibilité : contrastes, focus clavier, taille de police — focus clavier et tailles OK ; **reste les contrastes** : `--text-muted` sur `--panel` (4,48), boutons rouille/bleus et liens bleu clair sous 4,5:1 → valeurs proposées : `--text-muted #9d9283`, `--accent-blue-light #7297ba`, `--accent-rust-light #e37253`, `--accent-rust #943d28`, `--accent-blue #3f5a75`
+- [x] Performance : compression et redimensionnement des images à l'upload (dans le navigateur avant l'envoi, `shrinkImage` dans `web/src/lib/upload.ts` : WebP, 512 px avatar / 1600 couverture / 2000 article, GIF et petites images intactes), lazy-loading (images, avatars, PDF, YouTube chargé au clic)
+- [x] RGPD : page `/mentions-legales` (**passages [entre crochets] à compléter par l'asso**), suppression de compte `DELETE /api/me` (mot de passe, fichiers du bucket compris), aucun tracking (YouTube ne charge rien avant le clic)
+- [x] Rate limiting sur l'auth, les réactions et les commentaires (+ uploads, suppression de compte) — `@RateLimit` dans `api/src/rate-limit/`, en mémoire (une seule instance), 429 + `Retry-After`
 - [ ] Nom de domaine mortauxrats.fr → Railway
 
 ---

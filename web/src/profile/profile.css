@@ -1,0 +1,67 @@
+/* ---------------------------------------------------------------- Profil */
+.profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 32px; align-items: start; }
+.profile-side { display: flex; flex-direction: column; gap: 24px; }
+.profile-id { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.profile-id__avatar {
+  width: 128px; height: 128px; object-fit: cover;
+  border: var(--px) solid var(--outline);
+  box-shadow: 4px 4px 0 rgb(0 0 0 / 0.45);
+  image-rendering: pixelated;
+}
+.profile-id__pseudo { margin: 0; font-size: 24px; }
+.profile-main { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+.profile-articles { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.profile-articles a {
+  position: relative; display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; color: inherit; text-decoration: none;
+}
+.profile-articles__title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.profile-articles time { color: var(--text-muted); font-size: 14px; white-space: nowrap; }
+
+/* ---------------------------------------------------------------- Sac (8 cases) */
+.bag .window98__body { display: flex; flex-direction: column; gap: 16px; }
+.bag__hint { margin: 0; font-size: 14px; }
+.bag__grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+
+.bag-slot {
+  position: relative; width: 100%; aspect-ratio: 1;
+  display: flex; flex-direction: column; align-items: stretch; gap: 6px;
+  padding: 8px; font: inherit; color: var(--text); text-align: left; cursor: pointer;
+  background: var(--accent-blue-dark);
+  border: var(--px) solid var(--outline);
+  box-shadow: inset 2px 2px 0 var(--accent-blue), inset -2px -2px 0 var(--bevel-dark);
+}
+.bag-slot--empty { background: var(--bg); box-shadow: inset 2px 2px 0 var(--bevel-dark), inset -2px -2px 0 var(--bevel-mid); }
+.bag-slot:disabled { cursor: default; }
+.bag-slot--selected { background: var(--accent-blue); outline: var(--px) solid var(--accent-rust-light); outline-offset: 2px; }
+.bag-slot[draggable='true'] { cursor: grab; }
+.bag-slot__num { position: absolute; top: 4px; right: 6px; font-size: 12px; color: var(--text-muted); }
+.bag-slot__cover {
+  width: 100%; flex: 1; min-height: 0; object-fit: cover;
+  border: var(--px) solid var(--outline);
+}
+.bag-slot__cover--none { display: block; opacity: 0.6; }
+.bag-slot__title {
+  font-size: 14px; line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.bag-slot--empty .bag-slot__title { margin: auto; }
+
+.bag__card p { margin: 0; }
+.bag__actions { display: flex; flex-wrap: wrap; gap: 8px; padding-block: 4px; }
+
+@media (max-width: 900px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .bag__grid { gap: 8px; }
+  .bag-slot { padding: 4px; }
+  .bag-slot__title { font-size: 12px; }
+}
+/* Téléphone : 4 petites cases, sans titre (la fiche sous la grille le donne) */
+@media (max-width: 480px) {
+  .bag__grid { gap: 6px; }
+  .bag-slot { padding: 3px; }
+  .bag-slot__title { display: none; }
+  .bag-slot--empty .bag-slot__title { display: block; }
+  .bag-slot__num { font-size: 10px; top: 2px; right: 4px; }
+}

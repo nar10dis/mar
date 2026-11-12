@@ -11,9 +11,11 @@ import { AppController } from './app.controller.js';
 import { ArticlesModule } from './articles/articles.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { CommentsModule } from './comments/comments.module.js';
+import { InventoryModule } from './inventory/inventory.module.js';
 import { MagazinesModule } from './magazines/magazines.module.js';
 import { PresenceModule } from './presence/presence.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { RateLimitModule } from './rate-limit/rate-limit.module.js';
 import { ReactionsModule } from './reactions/reactions.module.js';
 import { StorageModule } from './storage/storage.module.js';
 import { ThemesModule } from './themes/themes.module.js';
@@ -37,6 +39,7 @@ import { ThemesModule } from './themes/themes.module.js';
     }),
     AuthorizationModule.forRoot(),
     PrismaModule,
+    RateLimitModule,
     StorageModule,
     AuthModule,
     AccountModule,
@@ -47,6 +50,7 @@ import { ThemesModule } from './themes/themes.module.js';
     ArticlesModule,
     ReactionsModule,
     CommentsModule,
+    InventoryModule,
     PresenceModule,
   ],
   controllers: [AppController],

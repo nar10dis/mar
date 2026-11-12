@@ -87,6 +87,8 @@ même taille**, aucun changement de code nécessaire.
 - Carte : `map.png` (1920×1080, écran paysage) et `map-portrait.png` (1080×1920, écran plus haut
   que large). Après remplacement, ajuster les encadrés des POI en % dans `web/src/map/map.config.ts`
   (coin haut-gauche + taille de l'encadré clair, un par orientation).
+  Le quadrillage fin et l'effet de pixels au survol (`web/src/map/MapPixels.tsx`) se calent tout
+  seuls sur les zones de fond de l'image (couleur `MAP.background`) : pas de quadrillage à dessiner dans l'image.
 - Nouvelle icône UI : `icon-<nom>.png` en 16×16, puis `<PixelIcon src={asset('icon-<nom>.png')} size={16} />`.
 
 ## Contenu de démo

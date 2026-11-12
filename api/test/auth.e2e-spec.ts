@@ -1,6 +1,8 @@
 import type { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { PrismaService } from '../src/prisma/prisma.service.js';
+import { StorageService } from '../src/storage/storage.service.js';
+import { keyPrefix } from '../src/storage/upload-rules.js';
 import { createApp, sessionCookie, uniq } from './helpers.js';
 
 // Requiert Postgres + S3Mock : npm run db:up à la racine.
@@ -20,6 +22,11 @@ describe('Auth, compte, admin (e2e)', () => {
   });
 
   afterAll(async () => {
+    // Les avatars uploadés pendant les tests ne doivent pas rester dans le bucket.
+    const storage = app.get(StorageService);
+    for (const u of await prisma.user.findMany({ where: { email: { in: [user.email, admin.email] } }, select: { id: true } })) {
+      await storage.deletePrefix(keyPrefix('avatar', u.id));
+    }
     await prisma.user.deleteMany({ where: { email: { in: [user.email, admin.email] } } });
     await prisma.magazine.deleteMany({ where: { title: `Test ${id}` } });
     await app.close();

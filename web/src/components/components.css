@@ -11,42 +11,67 @@
   image-rendering: pixelated;
 }
 
+/* ---------------------------------------------------------------- Blocs crénelés */
+/*
+ * Coins en escalier + ombre dure qui suit les crans. On ne découpe PAS l'élément lui-même
+ * (clip-path couperait l'ombre, le focus et ce qui dépasse) : son fond est dessiné par ::before
+ * et son ombre par ::after, tous deux découpés. Réglages par élément :
+ *   --box-bg      couleur du bloc            --box-clip    var(--notch) | var(--notch-sm)
+ *   --box-shadow  décalage de l'ombre (0 = pas d'ombre)
+ * Utilisable tel quel avec la classe .px-box (l'élément ne doit pas utiliser ::before/::after).
+ */
+.px-box, .pixel-button, .window98, .tabs98__panel, .tabs98__tab {
+  position: relative;
+  isolation: isolate;
+  background: none;
+  border: none;
+}
+.px-box::before, .px-box::after,
+.pixel-button::before, .pixel-button::after,
+.window98::before, .window98::after,
+.tabs98__panel::before, .tabs98__panel::after,
+.tabs98__tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: var(--box-clip, var(--notch));
+  pointer-events: none;
+}
+.px-box::before, .pixel-button::before, .window98::before, .tabs98__panel::before, .tabs98__tab::before {
+  z-index: -1;
+  background: var(--box-bg, var(--panel));
+}
+.px-box::after, .pixel-button::after, .window98::after, .tabs98__panel::after {
+  z-index: -2;
+  background: var(--shadow);
+  transform: translate(var(--box-shadow, 6px), var(--box-shadow, 6px));
+}
+
 /* ---------------------------------------------------------------- PixelButton */
 .pixel-button {
-  --btn-bg: var(--panel);
-  --btn-fg: var(--text);
-  --btn-hi: var(--bevel-light);
-  --btn-lo: var(--outline);
+  --box-bg: #3a342e;
+  --box-clip: var(--notch-sm);
+  --box-shadow: 4px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 40px;
-  padding: 6px 14px;
-  border: none;
-  background: var(--btn-bg);
-  color: var(--btn-fg);
+  min-height: 44px;
+  padding: 6px 16px;
+  color: var(--text);
   font: 400 16px/1 var(--font-ui);
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  /* Biseau dur façon Win98 */
-  box-shadow:
-    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--btn-lo),
-    inset var(--px) var(--px) 0 var(--btn-hi),
-    inset calc(var(--px) * -2) calc(var(--px) * -2) 0 var(--bevel-dark),
-    inset calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--bevel-mid);
+  transition: transform 60ms steps(1);
 }
-.pixel-button:hover { filter: brightness(1.15); }
-.pixel-button:active {
-  box-shadow:
-    inset var(--px) var(--px) 0 var(--btn-lo),
-    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--btn-hi),
-    inset calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--bevel-dark);
-  padding: 8px 12px 4px 16px;
-}
-.pixel-button:disabled { opacity: 0.45; cursor: default; filter: none; }
-.pixel-button--rust { --btn-bg: var(--accent-rust); --btn-fg: #fff3e8; --btn-hi: var(--accent-rust-light); }
-.pixel-button--blue { --btn-bg: var(--accent-blue); --btn-fg: #eef4fa; --btn-hi: var(--accent-blue-light); }
+.pixel-button:hover { filter: brightness(1.12); }
+/* Appui : le bouton descend sur son ombre */
+.pixel-button:active:not(:disabled) { transform: translate(4px, 4px); }
+.pixel-button:active:not(:disabled)::after { transform: none; }
+.pixel-button:disabled { opacity: 0.45; cursor: default; filter: none; --box-shadow: 0; }
+.pixel-button--rust { --box-bg: var(--accent-rust-light); color: #1a0f0b; font-weight: 700; }
+.pixel-button--blue { --box-bg: var(--accent-blue-light); color: #10202f; font-weight: 700; }
+.pixel-button--small { --box-shadow: 3px; min-height: 32px; padding: 4px 10px; font-size: 14px; }
 
 /* ---------------------------------------------------------------- Cartouche */
 .cartouche {
@@ -65,8 +90,11 @@
   font-family: var(--font-text);
   font-size: var(--fs-text);
   line-height: var(--lh);
+  /* drop-shadow (et pas box-shadow) : l'ombre suit la forme du cadre pixel */
+  filter: drop-shadow(6px 6px 0 var(--shadow));
 }
 .cartouche__title {
+  font-family: var(--font-ui);
   font-size: var(--fs-text);
   line-height: var(--lh);
   color: var(--accent-rust);
@@ -76,21 +104,16 @@
 .cartouche__body > * + * { margin-top: var(--lh); }
 
 /* ---------------------------------------------------------------- Window98 */
-.window98 {
-  border: 8px solid transparent;
-  border-image: url('/assets/window.png') 8 / 8px stretch;
-  image-rendering: pixelated;
-  background: var(--panel);
-  background-clip: padding-box;
-  box-shadow: 6px 6px 0 rgb(0 0 0 / 0.45); /* ombre dure */
-}
+/* Fenêtre « console DS » : bloc crénelé + ombre dure, bandeau de titre bleu crénelé à l'intérieur */
+.window98 { padding: 4px; }
 .window98__titlebar {
   display: flex;
   align-items: center;
   gap: 6px;
-  height: 28px;
-  padding: 0 4px 0 6px;
-  background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue));
+  min-height: 32px;
+  padding: 0 6px 0 10px;
+  background: var(--accent-blue-dark);
+  clip-path: var(--notch-sm);
   color: #eef4fa;
   font: 700 15px/1 var(--font-ui);
 }
@@ -98,25 +121,23 @@
 .window98__close {
   display: grid;
   place-items: center;
-  width: 22px;
-  height: 20px;
+  width: 24px;
+  height: 22px;
   padding: 0;
   border: none;
-  background: var(--panel);
+  background: #24364a;
+  clip-path: var(--notch-sm);
   cursor: pointer;
-  box-shadow:
-    inset -2px -2px 0 var(--outline),
-    inset 2px 2px 0 var(--bevel-light);
 }
-.window98__close:active { box-shadow: inset 2px 2px 0 var(--outline); }
-.window98__body { padding: 12px; }
+.window98__close:hover { background: var(--accent-blue); }
+.window98__close:active { transform: translateY(var(--px)); }
+.window98__body { padding: 14px 12px 12px; }
 
 .separator98 {
-  height: 0;
-  margin: 8px 0;
+  height: var(--px);
+  margin: 10px 0;
   border: none;
-  border-top: var(--px) solid var(--bevel-dark);
-  border-bottom: var(--px) solid var(--bevel-mid);
+  background: #3a342e;
 }
 
 /* ---------------------------------------------------------------- ReactionBubble */
@@ -180,23 +201,21 @@
 
 /* ---------------------------------------------------------------- Champs Win98 */
 .field { display: flex; flex-direction: column; gap: 4px; }
-.field__label { font-size: 16px; }
+.field__label { font: 400 16px/1.3 var(--font-ui); }
 .field__hint { margin: 0; font-size: 14px; color: var(--text-muted); }
 .field__error { margin: 0; font-size: 14px; color: var(--accent-rust-light); }
 .input98 {
   width: 100%;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: none;
-  background: #14110e;
+  background: var(--outline);
+  clip-path: var(--notch-sm);
   color: var(--text);
-  font: 400 16px/1.4 var(--font-ui);
-  /* creusé : l'inverse du biseau des boutons */
-  box-shadow:
-    inset var(--px) var(--px) 0 var(--outline),
-    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--bevel-light),
-    inset calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--bevel-dark);
+  font: 400 16px/1.4 var(--font-text);
 }
-.input98:focus-visible { outline: var(--px) solid var(--accent-blue-light); outline-offset: 0; }
+.input98::placeholder { color: #7a7064; }
+/* Le champ est découpé (clip-path) : focus et erreur se dessinent À L'INTÉRIEUR, sinon ils seraient coupés */
+.input98:focus-visible { outline: none; box-shadow: inset 0 0 0 var(--px) var(--accent-blue-light); }
 .input98[aria-invalid='true'] { box-shadow: inset 0 0 0 var(--px) var(--accent-rust-light); }
 textarea.input98 { min-height: 160px; resize: vertical; }
 select.input98 { cursor: pointer; }
@@ -204,9 +223,9 @@ select.input98 { cursor: pointer; }
 .checkbox98 { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 16px; }
 .checkbox98 input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .checkbox98__box {
-  width: 18px; height: 18px; flex: none;
-  background: #14110e;
-  box-shadow: inset var(--px) var(--px) 0 var(--outline), inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--bevel-light);
+  width: 20px; height: 20px; flex: none;
+  background: var(--outline);
+  box-shadow: inset 0 0 0 var(--px) #4a433c;
   display: grid; place-items: center;
 }
 .checkbox98 input:checked + .checkbox98__box::after { content: ''; width: 8px; height: 8px; background: var(--accent-rust-light); }
@@ -214,39 +233,32 @@ select.input98 { cursor: pointer; }
 
 .form98 { display: flex; flex-direction: column; gap: 16px; }
 .form98__actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-.form-error { margin: 0; padding: 8px 10px; background: rgb(168 69 46 / 0.2); border-left: 4px solid var(--accent-rust); }
+.form-error { margin: 0; padding: 10px 12px; background: rgb(168 69 46 / 0.22); clip-path: var(--notch-sm); color: #f0c2b4; }
 
-/* ---------------------------------------------------------------- Onglets Win98 */
-.tabs98__list { display: flex; gap: 2px; flex-wrap: wrap; position: relative; z-index: 1; }
+/* ---------------------------------------------------------------- Onglets */
+/* Pastilles crénelées au-dessus d'un panneau crénelé avec ombre dure */
+.tabs98__list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .tabs98__tab {
-  padding: 8px 14px 6px;
-  border: none;
-  background: var(--panel);
-  color: var(--text-muted);
-  font: 400 16px/1 var(--font-ui);
+  --box-bg: #24364a;
+  --box-clip: var(--notch-sm);
+  padding: 9px 14px;
+  color: #c9d8e6;
+  font: 400 15px/1 var(--font-ui);
   cursor: pointer;
-  box-shadow: inset var(--px) var(--px) 0 var(--bevel-light), inset calc(var(--px) * -1) 0 0 var(--outline);
-  margin-top: 4px;
 }
-.tabs98__tab[aria-selected='true'] { color: var(--text); margin-top: 0; padding-bottom: 10px; margin-bottom: calc(var(--px) * -1); }
-.tabs98__panel {
-  padding: 16px;
-  background: var(--panel);
-  box-shadow:
-    inset var(--px) var(--px) 0 var(--bevel-light),
-    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 var(--outline);
-}
+.tabs98__tab:hover { --box-bg: #2f4560; }
+.tabs98__tab[aria-selected='true'] { --box-bg: var(--accent-blue-light); color: #10202f; font-weight: 700; }
+.tabs98__panel { padding: 18px; }
 
 /* ---------------------------------------------------------------- Tableau (liste Win98) */
-.table98 { width: 100%; border-collapse: collapse; background: #14110e; font-size: 15px; }
-.table98 th { text-align: left; padding: 6px 10px; background: var(--panel); box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light); font-weight: 400; color: var(--text-muted); }
+.table98 { width: 100%; border-collapse: collapse; background: var(--panel-deep); font-size: 15px; }
+.table98 th { text-align: left; padding: 8px 10px; background: var(--accent-blue-dark); font: 400 14px/1.2 var(--font-ui); color: #c9d8e6; }
 .table98 td { padding: 8px 10px; border-bottom: 1px solid var(--grid); vertical-align: middle; }
 .table98 tr:hover td { background: rgb(74 106 138 / 0.18); }
 .table98__actions { display: flex; gap: 8px; justify-content: flex-end; }
 .table98__thumb { width: 36px; height: 48px; object-fit: cover; display: block; border: var(--px) solid var(--outline); }
 .table-wrap { overflow-x: auto; }
-.badge { display: inline-block; padding: 1px 8px; font-size: 13px; border: var(--px) solid currentColor; }
+.badge { display: inline-block; padding: 2px 8px; font: 400 13px/1.3 var(--font-ui); border: var(--px) solid currentColor; }
 .badge--rust { color: var(--accent-rust-light); }
 .badge--blue { color: var(--accent-blue-light); }
 .badge--muted { color: var(--text-muted); }
-.pixel-button--small { min-height: 30px; padding: 4px 10px; font-size: 14px; }
