@@ -46,9 +46,9 @@
 }
 .youtube-embed__play {
   display: grid; place-items: center; width: 64px; height: 44px; font-size: 22px;
-  background: var(--accent-rust); border: var(--px) solid var(--outline); box-shadow: 4px 4px 0 rgb(0 0 0 / 0.5);
+  background: var(--accent-rust-light); color: #1a0f0b; clip-path: var(--notch-sm);
 }
-.youtube-embed__facade:hover .youtube-embed__play, .youtube-embed__facade:focus-visible .youtube-embed__play { background: var(--accent-rust-light); }
+.youtube-embed__facade:hover .youtube-embed__play, .youtube-embed__facade:focus-visible .youtube-embed__play { filter: brightness(1.12); }
 .youtube-embed__facade:focus-visible { outline: var(--px) solid var(--accent-blue-light); outline-offset: -6px; }
 .youtube-embed__note { font-size: 13px; color: var(--text-muted); }
 
@@ -74,17 +74,21 @@
   .toc--compact { display: none; }
 }
 
+/* Bloc crénelé + ombre dure : fond découpé sur ::before, ombre en drop-shadow (elle suit les crans) */
 .toc {
-  background: var(--panel);
-  border: var(--px) solid var(--outline);
-  box-shadow: inset var(--px) var(--px) 0 var(--bevel-light), 4px 4px 0 rgb(0 0 0 / 0.45);
+  position: relative;
+  isolation: isolate;
+  padding: 4px;
+  filter: drop-shadow(6px 6px 0 var(--shadow));
   font-size: 15px;
 }
+.toc::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--panel); clip-path: var(--notch); }
 .toc__title, .toc--compact summary {
-  padding: 4px 10px;
-  background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue));
+  padding: 8px 10px;
+  background: var(--accent-blue-dark);
+  clip-path: var(--notch-sm);
   color: #eef4fa;
-  font-weight: 700;
+  font: 700 15px/1 var(--font-ui);
 }
 .toc--compact summary { cursor: pointer; }
 .toc__list { list-style: none; margin: 0; padding: 8px 6px; max-height: 60cqh; overflow: auto; }
@@ -121,26 +125,32 @@
   margin-top: 16px;
   pointer-events: none; /* seuls les boutons captent les clics */
 }
+/* Même construction que .pixel-button : fond crénelé (::before) + ombre dure crénelée (::after) */
 .scroll-buttons__btn {
   pointer-events: auto;
-  padding: 8px 12px;
+  position: relative;
+  isolation: isolate;
+  padding: 10px 14px;
   border: none;
-  background: var(--panel);
+  background: none;
   color: var(--text);
   font: 400 15px/1 var(--font-ui);
   cursor: pointer;
-  box-shadow:
-    inset -2px -2px 0 var(--outline),
-    inset 2px 2px 0 var(--bevel-light),
-    4px 4px 0 rgb(0 0 0 / 0.45);
 }
+.scroll-buttons__btn::before, .scroll-buttons__btn::after {
+  content: ''; position: absolute; inset: 0; clip-path: var(--notch-sm); pointer-events: none;
+}
+.scroll-buttons__btn::before { z-index: -1; background: #3a342e; }
+.scroll-buttons__btn::after { z-index: -2; background: var(--shadow); transform: translate(4px, 4px); }
 .scroll-buttons__btn:hover { filter: brightness(1.15); }
-.scroll-buttons__btn:active { box-shadow: inset 2px 2px 0 var(--outline); }
+.scroll-buttons__btn:active { transform: translate(4px, 4px); }
+.scroll-buttons__btn:active::after { transform: none; }
 
 /* Liste d'articles (blog, en attendant le vrai fil de la phase 5) */
 .article-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
-.article-card { position: relative; display: grid; grid-template-columns: 160px 1fr; gap: 16px; padding: 12px; background: var(--panel); border: var(--px) solid var(--outline); color: inherit; text-decoration: none; }
-.article-card__cover { width: 160px; aspect-ratio: 16 / 9; object-fit: cover; border: var(--px) solid var(--outline); background: #14110e; }
+.article-card { position: relative; isolation: isolate; display: grid; grid-template-columns: 160px 1fr; gap: 16px; padding: 12px; filter: drop-shadow(6px 6px 0 var(--shadow)); color: inherit; text-decoration: none; }
+.article-card::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--panel); clip-path: var(--notch); }
+.article-card__cover { width: 160px; aspect-ratio: 16 / 9; object-fit: cover; clip-path: var(--notch-sm); background: #14110e; }
 .article-card__title { margin: 0 0 8px; font-size: 20px; }
 
 @media (max-width: 900px) {

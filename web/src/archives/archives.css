@@ -23,7 +23,7 @@
   );
   box-shadow:
     inset 0 0 0 4px #24364c,
-    6px 6px 0 rgb(0 0 0 / 0.45);
+    6px 6px 0 var(--shadow);
 }
 
 .wheel__orbit {
@@ -87,8 +87,8 @@
   text-align: center;
   background: var(--paper);
   color: var(--ink);
-  border: var(--px) solid var(--outline);
-  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.45);
+  clip-path: var(--notch-sm);
+  font-family: var(--font-ui);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -116,14 +116,16 @@
 .archives__search .input98 { flex: 1; }
 .archives__sort { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 .archives__sort-label { margin-right: 6px; color: var(--text-muted); font-size: 15px; }
+/* Pastilles crénelées, comme les onglets (components.css) */
 .sort98 {
-  padding: 6px 10px;
+  padding: 8px 12px;
   border: none;
-  background: var(--panel);
-  color: var(--text);
+  background: #24364a;
+  clip-path: var(--notch-sm);
+  color: #c9d8e6;
   font: 400 14px/1 var(--font-ui);
   cursor: pointer;
-  box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light);
 }
-.sort98[aria-checked='true'] { background: #14110e; color: var(--accent-rust-light); box-shadow: inset 2px 2px 0 var(--outline); }
+.sort98:hover { background: var(--accent-blue-dark); }
+.sort98[aria-checked='true'] { background: var(--accent-blue-light); color: #10202f; font-weight: 700; }
 .archives__count { margin: 0 0 12px; color: var(--text-muted); font-size: 15px; }

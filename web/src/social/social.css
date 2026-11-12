@@ -20,13 +20,14 @@
 .comment__head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 15px; }
 .comment__toggle {
   min-width: 22px; height: 22px; padding: 0;
-  border: none; background: var(--panel); color: var(--text);
+  border: none; background: #24364a; color: #c9d8e6;
+  clip-path: var(--notch-sm);
   font: 400 14px/1 var(--font-ui); cursor: pointer;
-  box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light);
 }
-.comment__toggle:active { box-shadow: inset 2px 2px 0 var(--outline); }
+.comment__toggle:hover { background: var(--accent-blue-dark); }
+.comment__toggle:active { transform: translateY(var(--px)); }
 .comment__avatar { width: 22px; height: 22px; object-fit: cover; border: 1px solid var(--outline); }
-.comment__author { color: var(--text); }
+.comment__author { color: var(--text); font-family: var(--font-ui); }
 .comment__date, .comment__hidden { color: var(--text-muted); font-size: 13px; }
 .comment__body { margin: 6px 0 0 30px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .comment__reply-btn {
