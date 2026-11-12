@@ -139,11 +139,11 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - ✅ **Fini quand** : un visiteur non connecté réagit, un connecté commente et répond à un commentaire.
 
 ### Phase 6 — Archives : roue + recherche + tri
-- [ ] Roue des thèmes en bas à gauche : « tous » par défaut + 7 thèmes
-- [ ] Barre de recherche (full-text Postgres en config française : titre, contenu, pseudo de l'auteur)
-- [ ] Tri sous la recherche : récent → ancien, ancien → récent, A → Z, Z → A, aléatoire (défaut)
-- [ ] Combinables, ex. thème + Z-A + recherche « BD » ; état reflété dans l'URL (`?theme=cinema&sort=za&q=BD`)
-- [ ] Thèmes modifiables en dev (seed), pas d'UI admin
+- [x] Roue des thèmes en bas à gauche : « tous » par défaut + 7 thèmes (rotation au plus court, clavier ← →)
+- [x] Barre de recherche (full-text Postgres en config française : titre, contenu, pseudo de l'auteur) — colonne `Article.searchText` (sans accents), `GET /api/articles/search`
+- [x] Tri sous la recherche : récent → ancien, ancien → récent, A → Z, Z → A (ordre alphabétique français, collation `fr-x-icu`), aléatoire (défaut, stable pendant la visite, bouton « Mélanger »)
+- [x] Combinables, ex. thème + Z-A + recherche « BD » ; état reflété dans l'URL (`?theme=cinema&sort=za&q=BD`)
+- [x] Thèmes modifiables en dev (seed), pas d'UI admin
 - ✅ **Fini quand** : toutes les combinaisons filtre × tri × recherche renvoient le bon résultat.
 
 ### Phase 7 — Profil + inventaire

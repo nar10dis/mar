@@ -35,8 +35,10 @@ export function MapPage() {
               })}
             >
               {/* <img> plutôt que PixelIcon : sa taille suit celle de l'encadré (cqh), pas une taille fixe en px */}
-              <img className="poi__icon" src={poi.icon} alt="" draggable={false} />
-              <span className="poi__label">{poi.label}</span>
+              <span className="poi__inner">
+                <img className="poi__icon" src={poi.icon} alt="" draggable={false} />
+                <span className="poi__label">{poi.label}</span>
+              </span>
             </Link>
           ))}
         </nav>

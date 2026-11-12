@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import type { AuthUser } from '../auth/auth.types.js';
-import type { Prisma } from '../generated/prisma/client.js';
+import { Prisma } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { StorageService } from '../storage/storage.service.js';
 import { keyFromMediaUrl } from '../storage/upload-rules.js';
@@ -8,6 +8,7 @@ import { UploadsService } from '../storage/uploads.service.js';
 import { mediaRefs } from './article-content.schema.js';
 import type { ArticleContent, ArticleInput } from './article-content.schema.js';
 import { readingMinutes } from './reading-time.js';
+import { normalizeSearch, searchTextOf } from './search-text.js';
 
 const LIST_SELECT = {
   id: true,
@@ -34,6 +35,36 @@ export function excerptOf(content: ArticleContent | null, max = 220): string {
   return text.length > max ? `${text.slice(0, max).replace(/\s+\S*$/, '')}…` : text;
 }
 
+const FEED_SELECT = {
+  ...LIST_SELECT,
+  content: true,
+  _count: { select: { comments: true, reactions: true } },
+} as const;
+
+type FeedRow = Prisma.ArticleGetPayload<{ select: typeof FEED_SELECT }>;
+
+/** Carte du fil / des archives : sans le contenu, avec extrait, temps de lecture et compteurs. */
+function toFeedItem({ content, _count, ...a }: FeedRow) {
+  return {
+    ...a,
+    excerpt: excerptOf(content as unknown as ArticleContent),
+    readingMinutes: readingMinutes(content as unknown as ArticleContent),
+    commentCount: _count.comments,
+    reactionCount: _count.reactions,
+  };
+}
+
+export const SORTS = ['random', 'recent', 'ancien', 'az', 'za'] as const;
+
+export interface SearchParams {
+  theme?: string;
+  sort: (typeof SORTS)[number];
+  q?: string;
+  /** Graine du tri aléatoire (choisie par le navigateur) */
+  seed?: string;
+  offset: number;
+}
+
 @Injectable()
 export class ArticlesService {
   constructor(
@@ -51,19 +82,46 @@ export class ArticlesService {
       where: before ? { id: { lt: before } } : undefined,
       orderBy: { id: 'desc' },
       take: pageSize + 1,
-      select: { ...LIST_SELECT, content: true, _count: { select: { comments: true, reactions: true } } },
+      select: FEED_SELECT,
     });
     const page = rows.slice(0, pageSize);
     return {
-      items: page.map(({ content, _count, ...a }) => ({
-        ...a,
-        excerpt: excerptOf(content as unknown as ArticleContent),
-        readingMinutes: readingMinutes(content as unknown as ArticleContent),
-        commentCount: _count.comments,
-        reactionCount: _count.reactions,
-      })),
+      items: page.map(toFeedItem),
       nextBefore: rows.length > pageSize ? page[page.length - 1].id : null,
     };
+  }
+
+  /**
+   * Archives : thème × tri × recherche, combinables, par pages (offset).
+   * La recherche porte sur searchText (plein texte Postgres, config française) et sur le pseudo.
+   */
+  async search({ theme, sort, q, seed, offset }: SearchParams, pageSize = 24) {
+    const query = normalizeSearch(q ?? '');
+    const where = Prisma.sql`
+      WHERE (${theme ?? null}::text IS NULL OR t.slug = ${theme ?? null})
+        AND (
+          ${query} = ''
+          OR to_tsvector('french', a."searchText") @@ websearch_to_tsquery('french', ${query})
+          OR lower(u.pseudo) LIKE ${`%${query.replace(/[\\%_]/g, '\\$&')}%`}
+        )`;
+    const order = {
+      recent: Prisma.sql`a."createdAt" DESC, a.id DESC`,
+      ancien: Prisma.sql`a."createdAt" ASC, a.id ASC`,
+      az: Prisma.sql`a.title COLLATE "fr-x-icu" ASC, a.id ASC`,
+      za: Prisma.sql`a.title COLLATE "fr-x-icu" DESC, a.id DESC`,
+      // Aléatoire mais stable pour un même seed : les pages suivantes ne se remélangent pas.
+      random: Prisma.sql`md5(a.id::text || ${seed ?? ''}), a.id`,
+    }[sort];
+    const from = Prisma.sql`FROM "Article" a JOIN "Theme" t ON t.id = a."themeId" JOIN "User" u ON u.id = a."authorId"`;
+
+    const [ids, [{ total }]] = await Promise.all([
+      this.prisma.$queryRaw<{ id: number }[]>`SELECT a.id ${from} ${where} ORDER BY ${order} LIMIT ${pageSize} OFFSET ${offset}`,
+      this.prisma.$queryRaw<{ total: number }[]>`SELECT count(*)::int AS total ${from} ${where}`,
+    ]);
+    const rows = await this.prisma.article.findMany({ where: { id: { in: ids.map((r) => r.id) } }, select: FEED_SELECT });
+    const byId = new Map(rows.map((r) => [r.id, r]));
+    const items = ids.map((r) => byId.get(r.id)).filter((r) => r !== undefined).map(toFeedItem);
+    return { items, total, nextOffset: offset + ids.length < total ? offset + ids.length : null };
   }
 
   async get(id: number) {
@@ -85,6 +143,7 @@ export class ArticlesService {
         authorId: user.id,
         coverUrl: coverUrl ?? null,
         content: input.content as unknown as Prisma.InputJsonValue,
+        searchText: searchTextOf(input.title, input.content),
         media: { create: media.map((m) => ({ ...m, uploaderId: user.id })) },
       },
       select: { id: true },
@@ -111,6 +170,7 @@ export class ArticlesService {
           themeId: input.themeId,
           coverUrl: newCover,
           content: input.content as unknown as Prisma.InputJsonValue,
+          searchText: searchTextOf(input.title, input.content),
           media: { create: media.map((m) => ({ ...m, uploaderId: user.id })) },
         },
       }),

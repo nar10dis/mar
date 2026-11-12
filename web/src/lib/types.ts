@@ -91,6 +91,13 @@ export interface FeedPage {
   nextBefore: number | null;
 }
 
+/** GET /api/articles/search (Archives) */
+export interface SearchPage {
+  items: FeedItem[];
+  total: number;
+  nextOffset: number | null;
+}
+
 // ---------------------------------------------------------------- Réactions et commentaires
 
 /** GET/PUT/DELETE /api/articles/:id/reactions */

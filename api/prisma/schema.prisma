@@ -83,6 +83,9 @@ model Article {
   coverUrl   String?
   /// Contenu en blocs (voir éditeur, phase 4)
   content    Json
+  /// Titre + texte, minuscules sans accents : base de la recherche plein texte (Archives).
+  /// Tenu à jour par ArticlesService ; rempli par le seed pour les anciens articles.
+  searchText String          @default("")
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
   media      Media[]

@@ -8,7 +8,8 @@ import { ActuPage } from './pages/ActuPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
 import { LoginPage } from './pages/LoginPage.tsx';
 import { BlogPage } from './pages/BlogPage.tsx';
-import { ArchivesPage, NotFoundPage } from './pages/PlaceholderPages.tsx';
+import { ArchivesPage } from './pages/ArchivesPage.tsx';
+import { NotFoundPage } from './pages/PlaceholderPages.tsx';
 import { ShopPage } from './pages/ShopPage.tsx';
 import { LazyArticleEditPage, LazyArticlePage } from './pages/LazyArticlePages.tsx';
 

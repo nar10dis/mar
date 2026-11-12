@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
-import { ArticleMeta } from '../article/ArticleMeta.tsx';
-import '../article/article.css';
+import { FeedCard } from '../article/FeedCard.tsx';
 import { useAuth } from '../auth/useAuth.ts';
 import { PixelButton } from '../components/PixelButton.tsx';
 import { StatusMessage } from '../components/StatusMessage.tsx';
@@ -63,22 +61,7 @@ export function BlogPage() {
         <ul className="article-list">
           {items.map((a) => (
             <li key={a.id}>
-              <Link to={`/blog/articles/${a.id}`} className="article-card ds-select">
-                {a.coverUrl ? <img className="article-card__cover" src={a.coverUrl} alt="" loading="lazy" /> : <span className="article-card__cover" />}
-                <div>
-                  <h2 className="article-card__title">{a.title}</h2>
-                  <ArticleMeta article={a} />
-                  {a.excerpt && <p className="feed-card__excerpt">{a.excerpt}</p>}
-                  <div className="feed-card__stats">
-                    <span>
-                      {a.reactionCount} réaction{a.reactionCount > 1 ? 's' : ''}
-                    </span>
-                    <span>
-                      {a.commentCount} commentaire{a.commentCount > 1 ? 's' : ''}
-                    </span>
-                  </div>
-                </div>
-              </Link>
+              <FeedCard article={a} />
             </li>
           ))}
         </ul>

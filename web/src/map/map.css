@@ -44,16 +44,22 @@
    (icône + étiquette) est dimensionné en % de l'encadré (cqh/cqw) : rien ne dépasse,
    quelle que soit la taille de la carte. */
 .poi {
+  /* Taille = l'encadré (voir plus haut). Pas de padding ici : sur le conteneur lui-même,
+     les unités cq* se rapportent au conteneur PARENT (l'écran entier), pas à l'encadré. */
   container-type: size;
+  color: var(--ink);
+  text-decoration: none;
+}
+.poi__inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6cqh;
+  width: 100%;
+  height: 100%;
   /* 4 px de bordure claire sur 116 px d'encadré ≈ 3.5 % : on reste à l'intérieur */
   padding: 8cqh 6cqw;
-  color: var(--ink);
-  text-decoration: none;
 }
 .poi:hover { background: rgb(232 220 196 / 0.08); }
 .poi__icon {

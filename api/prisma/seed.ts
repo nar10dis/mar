@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/generated/prisma/client.js';
+import { searchTextOf } from '../src/articles/search-text.js';
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
@@ -37,6 +38,13 @@ async function main() {
     });
     if (count) console.log(`Seed: ${count} compte(s) promu(s) ADMIN.`);
   }
+
+  // Texte de recherche (Archives) des articles écrits avant son ajout. Idempotent.
+  const unindexed = await prisma.article.findMany({ where: { searchText: '' }, select: { id: true, title: true, content: true } });
+  for (const a of unindexed) {
+    await prisma.article.update({ where: { id: a.id }, data: { searchText: searchTextOf(a.title, a.content) } });
+  }
+  if (unindexed.length) console.log(`Seed: ${unindexed.length} article(s) indexé(s) pour la recherche.`);
 
   // Contenu de démo : seulement si la table est vide, et désactivable en prod
   // avec SEED_DEMO=false (sinon un admin qui vide la table le verrait revenir).

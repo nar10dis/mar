@@ -1,0 +1,129 @@
+/* ---------------------------------------------------------------- Roue des thèmes */
+.wheel {
+  --size: 280px;
+  --orbit: 104px; /* rayon de l'orbite des pastilles */
+  --pastille: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.wheel__disc {
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: var(--px) solid var(--outline);
+  /* Cercles concentriques bleu DS assombri, à paliers nets (rendu pixel) */
+  background: repeating-radial-gradient(
+    circle at center,
+    #2f4560 0 18px,
+    #36506d 18px 36px
+  );
+  box-shadow:
+    inset 0 0 0 4px #24364c,
+    6px 6px 0 rgb(0 0 0 / 0.45);
+}
+
+.wheel__orbit {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--rot));
+  transition: transform 420ms cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+
+.wheel__pastille {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--pastille);
+  height: var(--pastille);
+  margin: calc(var(--pastille) / -2) 0 0 calc(var(--pastille) / -2);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  /* Placée sur l'orbite, puis redressée pour rester droite pendant que la roue tourne */
+  transform: rotate(var(--angle)) translateY(calc(var(--orbit) * -1)) rotate(calc(var(--angle) * -1 - var(--rot)));
+  transition: transform 420ms cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+.wheel__pastille img { display: block; width: 100%; height: 100%; }
+.wheel__pastille:hover img { filter: brightness(1.2); }
+.wheel__pastille[aria-checked='true'] img { filter: drop-shadow(0 0 0 #fff) brightness(1.15); }
+.wheel__pastille:focus-visible { outline: var(--px) dashed var(--accent-rust-light); outline-offset: 3px; }
+
+/* Thème actif en grand au centre */
+.wheel__center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #24364c;
+  box-shadow: inset 0 0 0 var(--px) var(--outline);
+}
+.wheel__center img { width: 64px; height: 64px; }
+
+/* Petit curseur au-dessus de la position « sélectionnée » (en haut) */
+.wheel__cursor {
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  transform: translateX(-50%);
+  color: var(--accent-rust-light);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.wheel__label {
+  min-width: 160px;
+  padding: 4px 12px;
+  text-align: center;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--px) solid var(--outline);
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel__orbit, .wheel__pastille { transition: none; }
+}
+
+/* ---------------------------------------------------------------- Page Archives */
+.archives {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+.archives__wheel { justify-self: center; }
+.archives__wheel .wheel { --size: 220px; --orbit: 80px; --pastille: 42px; }
+
+/* Écran DS assez large : roue en bas à gauche, collée au bas de l'écran pendant le défilement */
+@container ds-main (min-width: 820px) {
+  .archives { grid-template-columns: 300px minmax(0, 1fr); align-items: start; }
+  .archives__wheel { justify-self: stretch; align-self: end; position: sticky; bottom: 16px; padding-top: 24px; }
+  .archives__wheel .wheel { --size: 280px; --orbit: 104px; --pastille: 52px; }
+}
+
+.archives__controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.archives__search { display: flex; align-items: center; gap: 8px; }
+.archives__search .input98 { flex: 1; }
+.archives__sort { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.archives__sort-label { margin-right: 6px; color: var(--text-muted); font-size: 15px; }
+.sort98 {
+  padding: 6px 10px;
+  border: none;
+  background: var(--panel);
+  color: var(--text);
+  font: 400 14px/1 var(--font-ui);
+  cursor: pointer;
+  box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light);
+}
+.sort98[aria-checked='true'] { background: #14110e; color: var(--accent-rust-light); box-shadow: inset 2px 2px 0 var(--outline); }
+.archives__count { margin: 0 0 12px; color: var(--text-muted); font-size: 15px; }

@@ -4,33 +4,23 @@ import { asset } from '../lib/assets.ts';
 import type { OnlineUser } from '../lib/types.ts';
 import type { ApiState } from '../lib/useApi.ts';
 
-const REFRESH_MS = 30_000;
-
 /**
- * Utilisateurs connectés, relus toutes les 30 s (et quand on se connecte / déconnecte).
- * Le widget ne fait que lire : la présence est signalée par usePresenceHeartbeat (RootLayout).
+ * Utilisateurs connectés, mis à jour en direct : l'API pousse la liste par SSE
+ * dès qu'elle change. Le widget ne fait que lire ; la présence est signalée par
+ * usePresenceHeartbeat (RootLayout).
  */
 export function OnlineWidget() {
   const { user } = useAuth();
   const [state, setState] = useState<ApiState<OnlineUser[]>>({ status: 'loading' });
 
   useEffect(() => {
-    const ctrl = new AbortController();
-    const load = () =>
-      fetch('/api/presence', { signal: ctrl.signal })
-        .then((r) => (r.ok ? (r.json() as Promise<OnlineUser[]>) : Promise.reject(new Error(String(r.status)))))
-        .then((data) => setState({ status: 'ready', data }))
-        .catch(() => {
-          // Une erreur passagère ne vide pas une liste déjà affichée.
-          if (!ctrl.signal.aborted) setState((s) => (s.status === 'ready' ? s : { status: 'error' }));
-        });
-    load();
-    const id = setInterval(load, REFRESH_MS);
-    return () => {
-      clearInterval(id);
-      ctrl.abort();
-    };
-  }, [user?.id]);
+    // EventSource se reconnecte tout seul si le flux coupe (redéploiement, réseau).
+    const source = new EventSource('/api/presence/stream');
+    source.onmessage = (e: MessageEvent<string>) => setState({ status: 'ready', data: JSON.parse(e.data) as OnlineUser[] });
+    // Pendant une reconnexion, on garde la dernière liste affichée.
+    source.onerror = () => setState((s) => (s.status === 'ready' ? s : { status: 'error' }));
+    return () => source.close();
+  }, []);
 
   if (state.status === 'loading') return <p className="widget__muted">Chargement…</p>;
   if (state.status === 'error') return <p className="widget__muted">Liste indisponible.</p>;
