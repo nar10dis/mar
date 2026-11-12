@@ -92,7 +92,10 @@ describe('Articles (e2e)', () => {
 
   it('lecture publique : liste et détail, sans compte', async () => {
     const list = await http().get('/api/articles').expect(200);
-    expect(list.body.some((a: { id: number }) => a.id === articleId)).toBe(true);
+    expect(list.body.items.some((a: { id: number }) => a.id === articleId)).toBe(true);
+    const mine = list.body.items.find((a: { id: number }) => a.id === articleId);
+    expect(mine.excerpt).toBe('Du gras');
+    expect(mine).not.toHaveProperty('content');
     const one = await http().get(`/api/articles/${articleId}`).expect(200);
     expect(one.body.title).toBe('Un article mixte');
     await http().get('/api/articles/999999999').expect(404);

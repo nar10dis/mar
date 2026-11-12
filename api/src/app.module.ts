@@ -10,9 +10,11 @@ import { AnnouncementsModule } from './announcements/announcements.module.js';
 import { AppController } from './app.controller.js';
 import { ArticlesModule } from './articles/articles.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { CommentsModule } from './comments/comments.module.js';
 import { MagazinesModule } from './magazines/magazines.module.js';
 import { PresenceModule } from './presence/presence.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { ReactionsModule } from './reactions/reactions.module.js';
 import { StorageModule } from './storage/storage.module.js';
 import { ThemesModule } from './themes/themes.module.js';
 
@@ -43,6 +45,8 @@ import { ThemesModule } from './themes/themes.module.js';
     MagazinesModule,
     AnnouncementsModule,
     ArticlesModule,
+    ReactionsModule,
+    CommentsModule,
     PresenceModule,
   ],
   controllers: [AppController],

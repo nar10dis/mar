@@ -6,7 +6,10 @@ import type { ApiState } from '../lib/useApi.ts';
 
 const REFRESH_MS = 30_000;
 
-/** Utilisateurs connectés, rafraîchis toutes les 30 s (et quand on se connecte / déconnecte). */
+/**
+ * Utilisateurs connectés, relus toutes les 30 s (et quand on se connecte / déconnecte).
+ * Le widget ne fait que lire : la présence est signalée par usePresenceHeartbeat (RootLayout).
+ */
 export function OnlineWidget() {
   const { user } = useAuth();
   const [state, setState] = useState<ApiState<OnlineUser[]>>({ status: 'loading' });

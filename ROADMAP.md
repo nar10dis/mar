@@ -131,11 +131,11 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - ✅ **Fini quand** : on crée un article mixte texte + image + son + YouTube, et il s'affiche correctement dans sa cartouche.
 
 ### Phase 5 — Blog : feed, article, réactions, commentaires
-- [ ] Feed des articles, du plus récent au plus ancien
-- [ ] Page article dans la cartouche pointillée
-- [ ] Réactions en bulles : ouvertes à tous, une par article et par personne, modifiable, compteur par bulle
-- [ ] Commentaires avec réponses imbriquées façon Reddit, réplier/déplier un fil
-- [ ] Boutons « profil » et « nouvel article » dans le POI Blog
+- [x] Feed des articles, du plus récent au plus ancien (pages de 12, « Voir plus », extrait + compteurs)
+- [x] Page article dans la cartouche pointillée
+- [x] Réactions en bulles : ouvertes à tous, une par article et par personne, modifiable, compteur par bulle (anonymes : cookie httpOnly `__Host-mar_voter`)
+- [x] Commentaires avec réponses imbriquées façon Reddit, réplier/déplier un fil (suppression : back-office admin)
+- [x] Boutons « profil » et « nouvel article » dans le POI Blog (« profil » actif en phase 7)
 - ✅ **Fini quand** : un visiteur non connecté réagit, un connecté commente et répond à un commentaire.
 
 ### Phase 6 — Archives : roue + recherche + tri

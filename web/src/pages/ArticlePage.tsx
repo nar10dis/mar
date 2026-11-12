@@ -11,8 +11,10 @@ import { asset } from '../lib/assets.ts';
 import type { Article } from '../lib/types.ts';
 import { useApi } from '../lib/useApi.ts';
 import { poiById } from '../map/map.config.ts';
+import { Comments } from '../social/Comments.tsx';
+import { Reactions } from '../social/Reactions.tsx';
 
-/** Lecture d'un article (réactions et commentaires : phase 5). */
+/** Lecture d'un article : contenu, réactions en bulles, commentaires en fil. */
 export function ArticlePage() {
   const { id } = useParams();
   const article = useApi<Article>(`/api/articles/${id}`);
@@ -69,6 +71,8 @@ export function ArticlePage() {
       <Cartouche className="cartouche--article">
         <ArticleContent content={a.content} />
       </Cartouche>
+      <Reactions articleId={a.id} />
+      <Comments articleId={a.id} />
     </PageLayout>
   );
 }

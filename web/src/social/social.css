@@ -1,0 +1,42 @@
+/* ---------------------------------------------------------------- Réactions */
+.reactions { margin: 24px 0 32px; }
+.reactions__bubbles { display: flex; flex-wrap: wrap; gap: 4px; }
+.reactions__hint { margin: 6px 0 0; font-size: 14px; color: var(--text-muted); }
+
+/* ---------------------------------------------------------------- Commentaires */
+.comments .window98__body { display: flex; flex-direction: column; gap: 16px; }
+.comment-form textarea.input98 { min-height: 80px; }
+
+.comment-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.comment-list .comment-list {
+  margin-top: 12px;
+  padding-left: 14px;
+  /* Trait vertical du fil, comme Reddit */
+  border-left: var(--px) solid var(--bevel-mid);
+}
+/* Au-delà d'une certaine profondeur, on arrête de décaler (lisibilité) */
+.comment[data-depth='6'] .comment-list { padding-left: 0; border-left: none; }
+
+.comment__head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 15px; }
+.comment__toggle {
+  min-width: 22px; height: 22px; padding: 0;
+  border: none; background: var(--panel); color: var(--text);
+  font: 400 14px/1 var(--font-ui); cursor: pointer;
+  box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light);
+}
+.comment__toggle:active { box-shadow: inset 2px 2px 0 var(--outline); }
+.comment__avatar { width: 22px; height: 22px; object-fit: cover; border: 1px solid var(--outline); }
+.comment__author { color: var(--text); }
+.comment__date, .comment__hidden { color: var(--text-muted); font-size: 13px; }
+.comment__body { margin: 6px 0 0 30px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.comment__reply-btn {
+  margin: 4px 0 0 30px; padding: 0; border: none; background: none;
+  color: var(--accent-blue-light); font: 400 14px/1.4 var(--font-ui); cursor: pointer;
+}
+.comment__reply-btn:hover { text-decoration: underline; }
+.comment .comment-form { margin: 8px 0 0 30px; }
+
+/* ---------------------------------------------------------------- Fil du blog */
+.feed-card__excerpt { margin: 8px 0 0; color: var(--text-muted); font-size: 16px; line-height: 1.4; }
+.feed-card__stats { display: flex; gap: 14px; margin-top: 8px; font-size: 14px; color: var(--text-muted); }
+.feed-more { display: flex; justify-content: center; margin-top: 24px; }

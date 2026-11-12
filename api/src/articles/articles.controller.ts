@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
 import { CurrentUser, Public } from '@nestjs/authentication';
 import { Can } from '@nestjs/authorization';
 import type { AuthUser } from '../auth/auth.types.js';
@@ -11,10 +11,11 @@ import { ArticlesService } from './articles.service.js';
 export class ArticlesController {
   constructor(private readonly articles: ArticlesService) {}
 
+  /** ?before=<id> : page suivante du fil */
   @Public()
   @Get()
-  list() {
-    return this.articles.list();
+  list(@Query('before', { schema: idParam.optional() }) before?: number) {
+    return this.articles.list(before);
   }
 
   @Public()

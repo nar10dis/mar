@@ -17,6 +17,22 @@ const LIST_SELECT = {
   author: { select: { id: true, pseudo: true, avatarUrl: true } },
 } as const;
 
+/** Les ~220 premiers caractères du premier bloc texte, pour le fil. */
+export function excerptOf(content: ArticleContent | null, max = 220): string {
+  const parts: string[] = [];
+  const walk = (n: { text?: string; content?: unknown[] }) => {
+    if (n.text) parts.push(n.text);
+    for (const c of n.content ?? []) {
+      if (parts.join(' ').length >= max) return;
+      walk(c as { text?: string; content?: unknown[] });
+    }
+  };
+  const firstText = content?.rows?.flatMap((r) => r.cols).find((b) => b.type === 'text');
+  if (firstText?.type === 'text') walk(firstText.doc as { content?: unknown[] });
+  const text = parts.join(' ').replace(/\s+/g, ' ').trim();
+  return text.length > max ? `${text.slice(0, max).replace(/\s+\S*$/, '')}…` : text;
+}
+
 @Injectable()
 export class ArticlesService {
   constructor(
@@ -25,8 +41,27 @@ export class ArticlesService {
     private readonly storage: StorageService,
   ) {}
 
-  list() {
-    return this.prisma.article.findMany({ orderBy: { createdAt: 'desc' }, take: 50, select: LIST_SELECT });
+  /**
+   * Fil du blog, du plus récent au plus ancien, par pages.
+   * `before` = id du dernier article de la page précédente (les id croissent avec la date).
+   */
+  async list(before?: number, pageSize = 12) {
+    const rows = await this.prisma.article.findMany({
+      where: before ? { id: { lt: before } } : undefined,
+      orderBy: { id: 'desc' },
+      take: pageSize + 1,
+      select: { ...LIST_SELECT, content: true, _count: { select: { comments: true, reactions: true } } },
+    });
+    const page = rows.slice(0, pageSize);
+    return {
+      items: page.map(({ content, _count, ...a }) => ({
+        ...a,
+        excerpt: excerptOf(content as unknown as ArticleContent),
+        commentCount: _count.comments,
+        reactionCount: _count.reactions,
+      })),
+      nextBefore: rows.length > pageSize ? page[page.length - 1].id : null,
+    };
   }
 
   async get(id: number) {

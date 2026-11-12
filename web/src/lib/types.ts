@@ -76,3 +76,32 @@ export interface Article extends ArticleSummary {
   updatedAt: string;
   themeId: number;
 }
+
+/** GET /api/articles?before=… */
+export interface FeedItem extends ArticleSummary {
+  excerpt: string;
+  commentCount: number;
+  reactionCount: number;
+}
+
+export interface FeedPage {
+  items: FeedItem[];
+  nextBefore: number | null;
+}
+
+// ---------------------------------------------------------------- Réactions et commentaires
+
+/** GET/PUT/DELETE /api/articles/:id/reactions */
+export interface ReactionSummary {
+  counts: Record<string, number>;
+  mine: string | null;
+}
+
+/** GET /api/articles/:id/comments (liste à plat, triée du plus ancien au plus récent) */
+export interface ArticleComment {
+  id: number;
+  body: string;
+  parentId: number | null;
+  createdAt: string;
+  author: { id: number; pseudo: string; avatarUrl: string | null };
+}
