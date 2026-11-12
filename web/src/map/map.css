@@ -4,14 +4,15 @@
   display: grid;
   place-items: center;
   height: 100%;
-  padding: 16px;
+  /* place pour l'ombre portée de la carte, que l'écran (overflow) couperait sinon */
+  padding: 0 8px 8px 0;
 }
 
 /* ---- Paysage (par défaut) */
 .map {
   position: relative;
   aspect-ratio: 1920 / 1080;
-  width: min(100%, calc((100cqh - 32px) * 16 / 9));
+  width: min(100%, calc((100cqh - 8px) * 16 / 9));
   border: var(--px) solid var(--outline);
   box-shadow: 6px 6px 0 rgb(0 0 0 / 0.45);
 }
@@ -27,7 +28,7 @@
 @media (orientation: portrait) {
   .map {
     aspect-ratio: 1080 / 1920;
-    width: min(100%, calc((100cqh - 32px) * 9 / 16));
+    width: min(100%, calc((100cqh - 8px) * 9 / 16));
   }
   .poi { left: calc(var(--xp) * 1%); top: calc(var(--yp) * 1%); }
 }

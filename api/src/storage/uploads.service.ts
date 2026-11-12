@@ -28,6 +28,11 @@ export class UploadsService {
    * à cet usage / cet utilisateur et que le fichier uploadé respecte les règles.
    */
   async confirm(user: AuthUser, purpose: UploadPurpose, key: string) {
+    return (await this.inspect(user, purpose, key)).url;
+  }
+
+  /** Comme confirm(), et renvoie aussi le type et la taille réels du fichier. */
+  async inspect(user: AuthUser, purpose: UploadPurpose, key: string) {
     const rule = UPLOAD_RULES[purpose];
     if (!key.startsWith(keyPrefix(purpose, user.id)) || key.includes('..')) {
       throw new BadRequestException('Fichier invalide');
@@ -38,6 +43,6 @@ export class UploadsService {
       await this.storage.deleteQuietly(key);
       throw new BadRequestException('Fichier refusé');
     }
-    return mediaUrl(key);
+    return { url: mediaUrl(key), contentType: meta.contentType, size: meta.size };
   }
 }

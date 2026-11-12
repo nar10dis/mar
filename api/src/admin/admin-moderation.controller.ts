@@ -4,6 +4,7 @@ import { Can } from '@nestjs/authorization';
 import type { z } from 'zod';
 import { AdminPolicy } from '../auth/admin.policy.js';
 import type { AuthUser } from '../auth/auth.types.js';
+import { ArticlesService } from '../articles/articles.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { idParam, roleSchema } from './admin.schemas.js';
 
@@ -11,7 +12,10 @@ import { idParam, roleSchema } from './admin.schemas.js';
 @Can(AdminPolicy, 'manage')
 @Controller('admin')
 export class AdminModerationController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly articles: ArticlesService,
+  ) {}
 
   @Get('users')
   listUsers() {
@@ -55,8 +59,8 @@ export class AdminModerationController {
   @Delete('articles/:id')
   @HttpCode(204)
   async deleteArticle(@Param('id', { schema: idParam }) id: number) {
-    const { count } = await this.prisma.article.deleteMany({ where: { id } });
-    if (!count) throw new NotFoundException();
+    // Passe par le service : les fichiers de l'article sont aussi retirés du bucket.
+    await this.articles.removeById(id);
   }
 
   @Get('comments')

@@ -10,8 +10,9 @@ web/                       front React + Vite (TypeScript)
   public/assets/           pixel art (placeholders pour l'instant, voir plus bas)
   src/styles/tokens.css    palette, polices, interligne
   src/components/          Cartouche, Window98, PixelButton, PixelIcon, ReactionBubble
-  src/map/map.config.ts    images de la carte (paysage + portrait), positions des POI et de l'horloge
+  src/map/map.config.ts    images de la carte (paysage + portrait), positions des POI
   src/pages/               pages (Blog et Archives encore vides)
+  src/widgets/             écran des widgets (horloge, connectés, raton, calendrier) ; catalogue dans widgets.ts
   src/content/about.ts     texte « Qui sommes-nous » (Actu)
 api/                       back NestJS 12 (ESM) + Prisma
   prisma/schema.prisma     modèle de données complet (cf. roadmap)
@@ -26,10 +27,14 @@ docker-compose.yml         Postgres local (port 5433)
 
 | URL | Contenu |
 |---|---|
-| `/` | Carte + 4 POI + horloge. Carte verticale si l'écran est plus haut que large |
+| `/` | Carte + 4 POI. Carte verticale si l'écran est plus haut que large |
 | `/shop` | Magazines (`GET /api/magazines`), bouton « Commander » vers HelloAsso |
 | `/actu` | « Qui sommes-nous » (`web/src/content/about.ts`) + annonces (`GET /api/announcements`) |
-| `/blog`, `/archives` | Pages vides, remplies aux phases 4 à 6 |
+| `/blog` | Liste des derniers articles (le vrai fil avec réactions arrive en phase 5) |
+| `/blog/nouveau` | Éditeur d'article (connecté) : rangées de 1 à 3 colonnes, blocs texte / image / son / PDF / YouTube |
+| `/blog/articles/:id` | Lecture d'un article ; `/modifier` pour l'auteur |
+| `/archives` | Page vide, remplie en phase 6 |
+| `/connexion`, `/compte`, `/admin` | Comptes, réglages du compte, back-office (admins) |
 | `/design` | Démo du design system : palette, composants, assets, thèmes lus en BDD |
 
 ## Dev local
@@ -81,7 +86,7 @@ même taille**, aucun changement de code nécessaire.
 - `frame.png` et `window.png` : 9-slice, coins de 8 px.
 - Carte : `map.png` (1920×1080, écran paysage) et `map-portrait.png` (1080×1920, écran plus haut
   que large). Après remplacement, ajuster les positions en % dans `web/src/map/map.config.ts`
-  (POI et horloge, une position par orientation).
+  (POI, une position par orientation).
 - Nouvelle icône UI : `icon-<nom>.png` en 16×16, puis `<PixelIcon src={asset('icon-<nom>.png')} size={16} />`.
 
 ## Contenu de démo

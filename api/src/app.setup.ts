@@ -8,6 +8,8 @@ export function configureApp(app: NestExpressApplication) {
   app.set('trust proxy', 1);
   // Valide les @Body({ schema }) / @Param(..., { schema }) avec zod.
   app.useGlobalPipes(new StandardSchemaValidationPipe());
+  // Un article (contenu en blocs JSON) peut dépasser la limite par défaut de 100 ko.
+  app.useBodyParser('json', { limit: '1mb' });
   // 403 sur toute écriture (POST, PATCH, DELETE…) venant d'un autre site.
   app.enableCsrfProtection();
   return app;

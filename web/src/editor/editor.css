@@ -1,0 +1,82 @@
+/* ---------------------------------------------------------------- Éditeur d'article */
+.article-editor { display: flex; flex-direction: column; gap: 20px; }
+
+.editor-row {
+  background: var(--panel);
+  border: var(--px) solid var(--outline);
+  box-shadow: inset var(--px) var(--px) 0 var(--bevel-light);
+}
+.editor-row__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 4px 6px 4px 10px;
+  background: linear-gradient(90deg, var(--accent-blue-dark), var(--accent-blue));
+  color: #eef4fa; font-size: 14px;
+}
+.editor-row__tools { display: flex; gap: 4px; flex-wrap: wrap; }
+.editor-row__cols { display: grid; gap: 12px; padding: 12px; }
+
+.editor-cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 8px; background: #14110e; border: 1px dashed var(--bevel-mid); }
+.editor-cell__head { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+.editor-cell__type { font-size: 14px; color: var(--text-muted); }
+
+/* Petits boutons d'outils Win98 */
+.tool98 {
+  min-width: 26px; height: 24px; padding: 0 6px;
+  border: none; background: var(--panel); color: var(--text);
+  font: 400 14px/1 var(--font-ui); cursor: pointer;
+  box-shadow: inset -2px -2px 0 var(--outline), inset 2px 2px 0 var(--bevel-light);
+}
+.tool98:active { box-shadow: inset 2px 2px 0 var(--outline); }
+.tool98:disabled { opacity: 0.35; cursor: default; }
+
+.block-picker { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 0; }
+.block-picker__btn {
+  padding: 6px 10px; border: var(--px) dashed var(--bevel-light); background: transparent;
+  color: var(--text); font: 400 14px/1.2 var(--font-ui); cursor: pointer;
+}
+.block-picker__btn:hover { border-style: solid; border-color: var(--accent-blue-light); }
+.editor-add-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--text-muted); }
+
+/* Barre d'outils du texte */
+.toolbar98 { display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: var(--panel); box-shadow: inset 2px 2px 0 var(--bevel-light), inset -2px -2px 0 var(--outline); }
+.toolbar98__btn {
+  height: 26px; padding: 0 8px; border: none; background: transparent; color: var(--text);
+  font: 400 14px/1 var(--font-ui); cursor: pointer;
+}
+.toolbar98__btn:hover { box-shadow: inset -1px -1px 0 var(--outline), inset 1px 1px 0 var(--bevel-light); }
+.toolbar98__btn[aria-pressed='true'] { background: #14110e; box-shadow: inset 2px 2px 0 var(--outline); }
+.tb--bold { font-weight: 700; }
+.tb--italic { font-style: italic; }
+.tb--underline { text-decoration: underline; }
+.tb--strike { text-decoration: line-through; }
+.tb--highlight { background: rgb(232 196 92 / 0.25); }
+
+/* Zone d'édition : même rendu papier que l'article publié */
+.rich-text--editing {
+  min-height: calc(var(--lh) * 4);
+  padding: 0 10px;
+  background-color: var(--paper);
+  color: var(--ink);
+  outline: none;
+}
+.rich-text--editing:focus-visible { box-shadow: 0 0 0 var(--px) var(--accent-blue-light); }
+
+.media-block { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.media-block .field, .media-block .youtube-embed { align-self: stretch; }
+.media-block__img { max-width: 100%; max-height: 240px; border: var(--px) solid var(--outline); }
+.media-block__audio { width: 100%; }
+.media-block__pdf { color: var(--accent-blue-light); }
+
+/* Page d'édition */
+.article-form { display: flex; flex-direction: column; gap: 24px; }
+.article-form__meta { display: grid; grid-template-columns: 1fr 240px; gap: 24px; align-items: start; }
+.article-form__cover img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: var(--px) solid var(--outline); display: block; }
+.article-form__bar {
+  position: sticky; bottom: 0; z-index: 5;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px; background: var(--panel); border-top: var(--px) solid var(--outline);
+}
+@media (max-width: 900px) {
+  .article-form__meta { grid-template-columns: 1fr; }
+  .editor-row__cols { grid-template-columns: 1fr !important; }
+}

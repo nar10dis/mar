@@ -8,6 +8,7 @@ import { AccountModule } from './account/account.module.js';
 import { AdminModule } from './admin/admin.module.js';
 import { AnnouncementsModule } from './announcements/announcements.module.js';
 import { AppController } from './app.controller.js';
+import { ArticlesModule } from './articles/articles.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { MagazinesModule } from './magazines/magazines.module.js';
 import { PresenceModule } from './presence/presence.module.js';
@@ -41,6 +42,7 @@ import { ThemesModule } from './themes/themes.module.js';
     ThemesModule,
     MagazinesModule,
     AnnouncementsModule,
+    ArticlesModule,
     PresenceModule,
   ],
   controllers: [AppController],

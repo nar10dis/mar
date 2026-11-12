@@ -1,18 +1,10 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '../auth/useAuth.ts';
 import { asset } from '../lib/assets.ts';
 
-const pad = (n: number) => String(n).padStart(2, '0');
-
-/** Barre du haut façon écran DS : nom à gauche ; compte, heure et date à droite. */
+/** Barre du haut façon écran DS : nom à gauche ; compte à droite (l'heure est dans le widget Horloge). */
 export function StatusBar() {
   const { user } = useAuth();
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 10_000);
-    return () => clearInterval(id);
-  }, []);
   return (
     <div className="status-bar">
       <Link to="/" className="status-bar__name">
@@ -35,12 +27,6 @@ export function StatusBar() {
             Connexion
           </Link>
         )}
-        <span className="status-bar__sep" />
-        <span className="status-bar__clock">
-          {pad(now.getHours())}:{pad(now.getMinutes())}
-          <span className="status-bar__sep" />
-          {pad(now.getDate())}/{pad(now.getMonth() + 1)}
-        </span>
       </div>
     </div>
   );

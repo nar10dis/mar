@@ -44,7 +44,7 @@
 - **Cartouche d'article** : fond `--paper`, lignes pointillées horizontales alignées sur l'interligne (comme la fiche de description d'un Pokémon), coins arrondis pixel, bordure épaisse.
 - **Menus / fenêtres** : style Windows 98 (ombre dure, séparateurs gravés, icônes 16 px).
 - **Sélection** : au survol / focus, 4 petits coins bleus autour de l'élément (comme la sélection des tuiles du menu DS), avec un léger battement. Classe `.ds-select`.
-- **Horloge** : vieille horloge façon horloge DS (cadran carré quadrillé, chiffres pixel, trotteuse rouille), à l'heure réelle, sur le côté droit de la carte.
+- **Horloge** : vieille horloge façon horloge DS (cadran carré quadrillé, chiffres pixel, trotteuse rouille), à l'heure réelle, dans le widget « Horloge » (écran des widgets, à gauche en paysage, en bas en portrait).
 - **Roue des thèmes** : disque à cercles concentriques (bleu DS assombri), pastilles colorées en orbite, rotation au clic, thème actif au centre.
 - **Pixel art** : toujours `image-rendering: pixelated`, mise à l'échelle par multiples entiers (×2, ×3).
 - **Aucun asset Nintendo** (sprites, polices) : uniquement des créations originales inspirées.
@@ -61,7 +61,7 @@ En attendant, Claude Code crée des **placeholders** aux bonnes dimensions dans 
 
 | Asset | Fichier | Taille native | Affichage | Notes |
 |---|---|---|---|---|
-| Carte | `map.png` | 1920×1080 | plein écran | Écran paysage. Positions des POI et de l'horloge en % dans `map.config.ts` |
+| Carte | `map.png` | 1920×1080 | plein écran | Écran paysage. Positions des POI en % dans `map.config.ts` |
 | Carte verticale | `map-portrait.png` | 1080×1920 | plein écran | Écran plus haut que large. Positions séparées dans `map.config.ts` |
 | Icônes POI | `poi-{shop,actu,blog,archives}.png` | 32×32 | ×2 | Une seule frame : la sélection est faite en CSS (4 coins bleus) |
 | Bulles de réaction | `reactions.png` | sheet 9 × 16×16 = 144×16 | ×2 | Ordre : cœur, goutte, ?, …, sourire, Zz, !, note, colère |
@@ -122,12 +122,12 @@ InventorySlot id, userId, position (0-7), articleId                     -- uniqu
 - ✅ **Fini quand** : un admin modifie un magazine sans toucher au code.
 
 ### Phase 4 — Éditeur d'articles + médias
-- [ ] Page « nouvel article » : titre, thème, couverture, contenu en blocs
-- [ ] Types de blocs : texte riche, image, son, PDF, vidéo YouTube (URL → embed)
-- [ ] Mise en page : rangées de 1 à 3 colonnes, chaque bloc placé librement dans les rangées, réordonnables (voir question éditeur)
-- [ ] Upload : le front demande une URL présignée à l'API, puis envoie le fichier directement dans le bucket ; validation MIME + taille max ; formats image (png, jpg, webp, gif), son (mp3, ogg, wav), pdf
-- [ ] Publication immédiate, sans validation
-- [ ] Édition et suppression par l'auteur
+- [x] Page « nouvel article » : titre, thème, couverture, contenu en blocs
+- [x] Types de blocs : texte riche (gras, italique, souligné, barré, surligné, liens, intertitres, listes, citations — TipTap, MIT), image, son, PDF, vidéo YouTube (URL → embed youtube-nocookie)
+- [x] Mise en page : rangées de 1 à 3 colonnes, chaque bloc placé librement dans les rangées, réordonnables — **choix : aux boutons** (↑↓ rangées, ←→ colonnes, ⇡⇣ rangée voisine), le glisser-déposer pourra s'ajouter par-dessus
+- [x] Upload : le front demande une URL présignée à l'API, puis envoie le fichier directement dans le bucket ; validation MIME + taille max (image 10 Mo, son 20 Mo, PDF 20 Mo) ; formats image (png, jpg, webp, gif), son (mp3, ogg, wav), pdf
+- [x] Publication immédiate, sans validation
+- [x] Édition et suppression par l'auteur (suppression aussi par un admin ; les fichiers retirés sont supprimés du bucket)
 - ✅ **Fini quand** : on crée un article mixte texte + image + son + YouTube, et il s'affiche correctement dans sa cartouche.
 
 ### Phase 5 — Blog : feed, article, réactions, commentaires

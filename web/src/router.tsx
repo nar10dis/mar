@@ -7,8 +7,10 @@ import { AccountPage } from './pages/AccountPage.tsx';
 import { ActuPage } from './pages/ActuPage.tsx';
 import { AdminPage } from './pages/AdminPage.tsx';
 import { LoginPage } from './pages/LoginPage.tsx';
-import { ArchivesPage, BlogPage, NotFoundPage } from './pages/PlaceholderPages.tsx';
+import { BlogPage } from './pages/BlogPage.tsx';
+import { ArchivesPage, NotFoundPage } from './pages/PlaceholderPages.tsx';
 import { ShopPage } from './pages/ShopPage.tsx';
+import { LazyArticleEditPage, LazyArticlePage } from './pages/LazyArticlePages.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +20,28 @@ export const router = createBrowserRouter([
       { path: '/shop', element: <ShopPage /> },
       { path: '/actu', element: <ActuPage /> },
       { path: '/blog', element: <BlogPage /> },
+      {
+        path: '/blog/nouveau',
+        element: (
+          <RequireAuth>
+            <LazyArticleEditPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: '/blog/articles/:id',
+        element: (
+          <LazyArticlePage />
+        ),
+      },
+      {
+        path: '/blog/articles/:id/modifier',
+        element: (
+          <RequireAuth>
+            <LazyArticleEditPage />
+          </RequireAuth>
+        ),
+      },
       { path: '/archives', element: <ArchivesPage /> },
       { path: '/design', element: <DesignPage /> },
       { path: '/connexion', element: <LoginPage /> },
