@@ -1,0 +1,14 @@
+{
+  "name": "mar-demo",
+  "private": true,
+  "scripts": {
+    "setup": "npm ci --prefix api && npm ci --prefix web",
+    "db:up": "docker compose up -d db",
+    "db:migrate": "npm run db:migrate --prefix api",
+    "db:seed": "npm run db:seed --prefix api",
+    "dev:api": "npm run start:dev --prefix api",
+    "dev:web": "npm run dev --prefix web",
+    "build": "npm run build --prefix web && npm run build --prefix api",
+    "start": "npm run start:prod --prefix api"
+  }
+}
