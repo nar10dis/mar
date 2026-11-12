@@ -19,7 +19,7 @@ let MessagesService = class MessagesService {
     }
     findLatest(limit = 50) {
         return this.prisma.message.findMany({
-            orderBy: { createdAt: 'asc' },
+            orderBy: { id: 'asc' },
             take: -limit,
         });
     }
